@@ -1,0 +1,28 @@
+xai:
+  api_key: ""
+  base_url: "https://api.x.ai/v1"
+  model_primary: "grok-4-1-fast-non-reasoning"
+  model_fallback: "grok-2-vision-latest"
+
+out_dir: "tifa_dataset"
+log_dir: "logs"
+limit: 20
+manifest: true
+download_concurrency: 8
+classify_concurrency: 3
+max_results_per_query: 80
+phash_distance: 6
+request_timeout: 20
+max_bytes: 15000000
+queue_size: 200
+max_download_retries: 3
+max_classify_retries: 2
+max_search_retries: 3
+user_agent: "tifa-archivist/0.1"
+
+search_queries:
+  - "Tifa Lockhart FF7"
+  - "Tifa Lockhart wallpaper 4k"
+  - "Tifa Lockhart cosplay"
+  - "\u30c6\u30a3\u30d5\u30a1 \u30ed\u30c3\u30af\u30cf\u30fc\u30c8"
+
