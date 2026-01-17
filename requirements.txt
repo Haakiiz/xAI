@@ -1,0 +1,9 @@
+aiohttp
+duckduckgo_search
+imagehash
+numpy
+pillow
+pydantic
+PyYAML
+pytest
+tqdm
