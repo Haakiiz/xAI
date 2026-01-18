@@ -4,7 +4,6 @@ import asyncio
 import json
 import logging
 import mimetypes
-import threading
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -16,8 +15,8 @@ from .config import AppConfig
 from .db import ImageDB
 from .dedupe import compute_sha256
 from .download import fetch_image
-from .search import generate_queries, search_ddg_images
-from .utils import slugify, utc_now_iso
+from .search import search_live_images
+from .utils import prepare_classification_bytes, slugify, utc_now_iso, validate_image_bytes
 
 
 CATEGORIES = [
@@ -30,7 +29,25 @@ CATEGORIES = [
     "nsfw",
     "other",
 ]
-ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+ALLOWED_EXTENSIONS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".avif",
+    ".heic",
+    ".heif",
+    ".jxl",
+    ".bmp",
+    ".tif",
+    ".tiff",
+}
+BLOCKED_HOSTS = {
+    "rare-gallery.com",
+    "www.rare-gallery.com",
+    "wallpapersden.com",
+    "images.wallpapersden.com",
+}
 
 
 class Counters:
@@ -88,6 +105,14 @@ def guess_extension(content_type: str) -> str:
     ext = mimetypes.guess_extension(content_type or "")
     if ext == ".jpe":
         ext = ".jpg"
+    if not ext and content_type:
+        manual = {
+            "image/avif": ".avif",
+            "image/heic": ".heic",
+            "image/heif": ".heif",
+            "image/jxl": ".jxl",
+        }
+        ext = manual.get(content_type)
     return ext or ".jpg"
 
 
@@ -143,7 +168,7 @@ async def progress_loop(counters: Counters, done_event: asyncio.Event, limit: in
 async def run_pipeline(config: AppConfig) -> None:
     logger = logging.getLogger(__name__)
 
-    if not config.skip_classify and not config.xai.api_key:
+    if not config.xai.api_key:
         raise ValueError("XAI API key missing. Set XAI_API_KEY or config.yaml.")
 
     out_dir = config.out_dir
@@ -158,17 +183,16 @@ async def run_pipeline(config: AppConfig) -> None:
     queue: asyncio.Queue[str | None] = asyncio.Queue(maxsize=config.queue_size)
     stop_event = asyncio.Event()
     done_event = asyncio.Event()
-    stop_flag = threading.Event()
     stop_lock = asyncio.Lock()
     search_stop_event = asyncio.Event()
     max_urls = max(1, config.limit * config.max_urls_multiplier)
+    categories_to_search = config.search_categories or CATEGORIES
 
     async def request_stop() -> None:
         async with stop_lock:
             if stop_event.is_set():
                 return
             stop_event.set()
-            stop_flag.set()
             for _ in range(config.download_concurrency):
                 await queue.put(None)
 
@@ -193,8 +217,12 @@ async def run_pipeline(config: AppConfig) -> None:
 
     def is_supported_url(url: str) -> bool:
         parsed = urlparse(url)
+        if parsed.hostname and parsed.hostname.lower() in BLOCKED_HOSTS:
+            return False
         ext = Path(parsed.path).suffix.lower()
-        return ext in ALLOWED_EXTENSIONS
+        if ext and ext not in ALLOWED_EXTENSIONS:
+            return False
+        return True
 
     timeout = aiohttp.ClientTimeout(total=config.request_timeout)
     download_sema = asyncio.Semaphore(config.download_concurrency)
@@ -206,7 +234,6 @@ async def run_pipeline(config: AppConfig) -> None:
             if search_stop_event.is_set():
                 return
             search_stop_event.set()
-            stop_flag.set()
             logger.info("search cap reached urls=%s max_urls=%s", await counters.get("urls_found"), max_urls)
 
     if config.skip_classify:
@@ -232,19 +259,28 @@ async def run_pipeline(config: AppConfig) -> None:
 
             await classifier.check_vision_support(session)
 
-        async def search_task(query: str) -> None:
+        async def search_task(category: str) -> None:
             if search_stop_event.is_set():
                 return
             async with search_sema:
                 if search_stop_event.is_set():
                     return
-                urls = await asyncio.to_thread(
-                    search_ddg_images,
-                    query,
-                    config.max_results_per_query,
-                    stop_flag,
-                    config.max_search_retries,
-                )
+                try:
+                    urls = await search_live_images(
+                        session=session,
+                        api_key=config.xai.api_key,
+                        base_url=config.xai.base_url,
+                        model=config.xai.model_primary,
+                        categories=CATEGORIES,
+                        target_category=category,
+                        seed_queries=config.search_queries,
+                        max_results=config.max_results_per_query,
+                        timeout=config.request_timeout,
+                        max_retries=config.max_search_retries,
+                    )
+                except Exception as exc:
+                    logger.warning("search failed category=%s error=%s", category, exc)
+                    return
             for url in urls:
                 if stop_event.is_set() or search_stop_event.is_set():
                     break
@@ -299,6 +335,47 @@ async def run_pipeline(config: AppConfig) -> None:
 
                     phash = None
 
+                    valid, reason, size, sniffed_mime, decoded = validate_image_bytes(
+                        data, config.min_side
+                    )
+                    if not valid:
+                        db.insert_record(
+                            url,
+                            sha256,
+                            phash,
+                            None,
+                            "discard",
+                            reason,
+                            0.0,
+                        )
+                        await counters.inc("discarded")
+                        if size:
+                            logger.info(
+                                "discarded invalid image url=%s reason=%s size=%sx%s",
+                                url,
+                                reason,
+                                size[0],
+                                size[1],
+                            )
+                        else:
+                            logger.info(
+                                "discarded invalid image url=%s reason=%s", url, reason
+                            )
+                        continue
+                    if sniffed_mime and (
+                        not content_type
+                        or content_type in {"application/octet-stream", "binary/octet-stream"}
+                        or not content_type.startswith("image/")
+                    ):
+                        content_type = sniffed_mime
+                    if not decoded:
+                        logger.info(
+                            "image decode skipped url=%s reason=%s mime=%s",
+                            url,
+                            reason,
+                            sniffed_mime or "unknown",
+                        )
+
                     if await counters.get("kept") >= config.limit:
                         db.insert_record(
                             url, sha256, phash, None, "discard", "limit_reached", 1.0
@@ -313,35 +390,51 @@ async def run_pipeline(config: AppConfig) -> None:
                         result_confidence = 1.0
                         await counters.inc("classified")
                     else:
+                        classify_bytes = None
+                        if decoded:
+                            classify_bytes = prepare_classification_bytes(data)
+                            if classify_bytes is None:
+                                decoded = False
+                                logger.info(
+                                    "image prep failed url=%s reason=decode_failed",
+                                    url,
+                                )
+                    if not config.skip_classify and not decoded:
+                        result_label = "other"
+                        result_model = "undecoded"
+                        result_confidence = 1.0
+                        await counters.inc("classified")
+                    elif not config.skip_classify:
                         assert classifier is not None
                         try:
-                            result = await classifier.classify(session, data)
+                            result = await classifier.classify(session, classify_bytes or data)
                         except Exception as exc:
-                            logger.warning("classification failed url=%s error=%s", url, exc)
-                            db.insert_record(
-                                url, sha256, phash, None, "discard", "classify_error", 0.0
+                            logger.warning(
+                                "classification failed url=%s error=%s", url, exc
                             )
-                            await counters.inc("discarded")
-                            continue
+                            result_label = "other"
+                            result_model = "classify_error"
+                            result_confidence = 0.0
+                            await counters.inc("classified")
+                        else:
+                            await counters.inc("classified")
 
-                        await counters.inc("classified")
+                            if result.is_underage_or_ambiguous or result.label == "discard":
+                                db.insert_record(
+                                    url,
+                                    sha256,
+                                    phash,
+                                    None,
+                                    "discard",
+                                    classifier.model_name,
+                                    result.confidence,
+                                )
+                                await counters.inc("discarded")
+                                continue
 
-                        if result.is_underage_or_ambiguous or result.label == "discard":
-                            db.insert_record(
-                                url,
-                                sha256,
-                                phash,
-                                None,
-                                "discard",
-                                classifier.model_name,
-                                result.confidence,
-                            )
-                            await counters.inc("discarded")
-                            continue
-
-                        result_label = result.label
-                        result_model = classifier.model_name
-                        result_confidence = result.confidence
+                            result_label = result.label
+                            result_model = classifier.model_name
+                            result_confidence = result.confidence
 
                     reserved = await counters.reserve_kept(config.limit)
                     if not reserved:
@@ -379,8 +472,9 @@ async def run_pipeline(config: AppConfig) -> None:
 
         progress_task = asyncio.create_task(progress_loop(counters, done_event, config.limit))
 
-        queries = generate_queries(config.search_queries)
-        search_tasks = [asyncio.create_task(search_task(q)) for q in queries]
+        search_tasks = [
+            asyncio.create_task(search_task(category)) for category in categories_to_search
+        ]
         download_tasks = [
             asyncio.create_task(download_worker(i))
             for i in range(config.download_concurrency)

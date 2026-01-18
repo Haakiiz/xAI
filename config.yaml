@@ -1,3 +1,7 @@
+# THIS FILE IS IGNORED BY GIT. DO NOT TRACK IN VERSION CONTROL.
+# To ignore this config.yaml, add the following line to your .gitignore file:
+# config.yaml
+
 xai:
   api_key: "REDACTED"
   base_url: "https://api.x.ai/v1"
@@ -11,22 +15,34 @@ manifest: true
 download_concurrency: 8
 classify_concurrency: 3
 max_results_per_query: 80
-max_urls_multiplier: 2
+max_urls_multiplier: 5
 search_concurrency: 2
-skip_classify: false
-min_bytes: 15000
 phash_distance: 6
 request_timeout: 20
 max_bytes: 15000000
+min_bytes: 2000
+min_side: 512
 queue_size: 200
 max_download_retries: 3
 max_classify_retries: 2
 max_search_retries: 3
-user_agent: "tifa-archivist/0.1"
+user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 search_queries:
   - "Tifa Lockhart FF7"
   - "Tifa Lockhart wallpaper 4k"
   - "Tifa Lockhart cosplay"
+  - "Tifa Lockhart fanart"
+  - "Tifa Lockhart 2d art"
+  - "Tifa Lockhart 3d render"
+  - "Tifa Lockhart key art"
+  - "Tifa Lockhart screenshot"
+  - "Tifa Lockhart official art"
+  - "Tifa Lockhart wallpaper"
+  - "Tifa Lockhart nsfw"
+  - "Tifa Lockhart sfw"
+  - "Tifa Lockhart remake"
   - "\u30c6\u30a3\u30d5\u30a1 \u30ed\u30c3\u30af\u30cf\u30fc\u30c8"
 
+search_categories:
+  - "wallpaper"

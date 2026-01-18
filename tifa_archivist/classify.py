@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import asyncio
 import base64
-import imghdr
 import json
 import logging
 import random
 from typing import Any
 
 import aiohttp
+from PIL import Image
+from io import BytesIO
 
 from .models import ClassificationResult
+from .utils import sniff_image_mime
 
 
 TEST_IMAGE_B64 = (
@@ -39,7 +41,14 @@ class ImageDecodeError(RuntimeError):
 
 
 def _guess_mime(data: bytes) -> str:
-    kind = imghdr.what(None, data)
+    sniffed = sniff_image_mime(data)
+    if sniffed:
+        return sniffed
+    try:
+        with Image.open(BytesIO(data)) as image:
+            kind = (image.format or "").lower()
+    except Exception:
+        return "image/jpeg"
     if kind == "jpeg":
         return "image/jpeg"
     if kind == "png":

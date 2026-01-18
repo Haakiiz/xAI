@@ -4,7 +4,7 @@ A Python 3.11+ CLI tool that searches for Tifa Lockhart images, downloads them,
 classifies them with xAI/Grok vision, and sorts them into category folders.
 
 Features:
-- DuckDuckGo image search (safesearch off)
+- LLM-generated search queries + DuckDuckGo image search for URLs
 - Async downloads and LLM classification with concurrency limits
 - Dedup by URL and sha256 (no image decoding step)
 - SQLite tracking for idempotent runs
@@ -27,7 +27,11 @@ Edit `config.yaml` or set an environment variable:
 setx XAI_API_KEY "YOUR_KEY"
 ```
 
+If you edit `config.yaml`, make sure it is ignored by git.
+
 ## Run
+
+Basic run (PowerShell):
 
 ```bash
 python -m tifa_archivist run --limit 20 --out ./tifa_dataset
@@ -38,6 +42,16 @@ Skip classification (downloads only, saves to `other/`):
 
 ```bash
 python -m tifa_archivist run --limit 20 --out ./tifa_dataset --skip-classify
+```
+
+First-time setup example:
+
+```bash
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+setx XAI_API_KEY "YOUR_KEY"
+python -m tifa_archivist run --limit 20 --out ./tifa_dataset
 ```
 
 ## Output
@@ -63,10 +77,15 @@ Also created:
   are skipped.
 - The classifier discards images with underage or ambiguous subjects.
 - To change models, update `xai.model_primary` and `xai.model_fallback` in `config.yaml`.
-- If you hit DDG rate limits, lower `search_concurrency` or reduce query count.
+- LLM query generation requires an xAI API key even when `--skip-classify` is used.
+- If you hit xAI or DDG rate limits, lower `search_concurrency` or reduce categories.
+- To search only specific categories, set `search_categories` in `config.yaml`
+  (example: `["wallpaper"]`).
 - To control cost, tune `max_urls_multiplier` (global URL cap = limit * multiplier).
 - Only `.jpg/.jpeg/.png` URLs are queued; non-matching content-types are skipped.
-- Small or truncated files are rejected via `min_bytes` and Content-Length checks.
+- Small, corrupted, or truncated files are rejected via `min_bytes`, decode checks, and
+  Content-Length validation.
+- To reduce pixelated results, raise `min_side` in `config.yaml` (default is 512).
 
 ## Tests
 
