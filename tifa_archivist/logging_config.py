@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import logging.config
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 
 def setup_logging(log_dir: Path) -> Path:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     log_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     log_path = log_dir / f"run_{timestamp}.log"

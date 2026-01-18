@@ -4,7 +4,16 @@ import logging
 import random
 import time
 
-from duckduckgo_search import DDGS
+try:
+    from ddgs import DDGS
+    from ddgs.exceptions import RatelimitException
+except Exception:  # pragma: no cover - fallback for older package
+    from duckduckgo_search import DDGS
+    try:
+        from duckduckgo_search.exceptions import RatelimitException
+    except Exception:  # pragma: no cover - last-resort fallback
+        class RatelimitException(Exception):
+            pass
 
 
 DEFAULT_QUERIES = [
@@ -27,6 +36,11 @@ VARIANT_SUFFIXES = [
     "remake",
 ]
 
+FILETYPE_SUFFIXES = [
+    "filetype:jpg",
+    "filetype:png",
+]
+
 EXTRA_QUERIES = [
     "Tifa Lockhart FFVII remake",
     "Tifa Lockhart key art",
@@ -41,6 +55,8 @@ def generate_queries(base_queries: list[str]) -> list[str]:
         queries.append(query)
         if query.isascii():
             for suffix in VARIANT_SUFFIXES:
+                queries.append(f"{query} {suffix}")
+            for suffix in FILETYPE_SUFFIXES:
                 queries.append(f"{query} {suffix}")
     queries.extend(EXTRA_QUERIES)
 
@@ -62,17 +78,23 @@ def search_ddg_images(
         try:
             urls: list[str] = []
             with DDGS() as ddgs:
-                for result in ddgs.images(
-                    query,
-                    safesearch="off",
-                    max_results=max_results,
-                ):
-                    if stop_flag.is_set():
-                        break
-                    url = result.get("image") or result.get("thumbnail")
-                    if url:
-                        urls.append(url)
+                    for result in ddgs.images(
+                        query,
+                        safesearch="off",
+                        max_results=max_results,
+                    ):
+                        if stop_flag.is_set():
+                            break
+                        url = result.get("image")
+                        if url:
+                            urls.append(url)
             return urls
+        except RatelimitException as exc:
+            if attempt == max_retries - 1:
+                logger.warning("search rate-limited query=%s error=%s", query, exc)
+                return []
+            delay = (2 ** attempt) + random.uniform(1.0, 2.0)
+            time.sleep(delay)
         except Exception as exc:
             if attempt == max_retries - 1:
                 logger.warning("search failed query=%s error=%s", query, exc)

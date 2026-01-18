@@ -35,6 +35,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Write manifest.json",
     )
+    run_parser.add_argument(
+        "--skip-classify",
+        action="store_true",
+        help="Skip xAI classification and save all images to other/",
+    )
 
     stats_parser = subparsers.add_parser("stats", help="Show dataset counts")
     stats_parser.add_argument("--out", type=Path, default=None, help="Output directory")
@@ -55,6 +60,8 @@ def main() -> None:
             config.db_path = config.out_dir / "images.db"
         if args.manifest is not None:
             config.manifest = args.manifest
+        if args.skip_classify:
+            config.skip_classify = True
 
         setup_logging(config.log_dir)
         try:
