@@ -2,7 +2,7 @@ aiohttp
 ddgs
 imagehash
 numpy
-pillow
+pillow>=10.0
 pydantic
 PyYAML
 pytest

@@ -33,10 +33,12 @@ class AppConfig:
     download_concurrency: int = 8
     classify_concurrency: int = 3
     max_results_per_query: int = 80
-    max_urls_multiplier: int = 2
+    max_urls_multiplier: int = 10
     search_concurrency: int = 2
     skip_classify: bool = False
     min_bytes: int = 15_000
+    min_side: int = 512
+    search_categories: list[str] | None = None
     search_queries: list[str] = field(default_factory=lambda: list(DEFAULT_SEARCH_QUERIES))
     phash_distance: int = 6
     request_timeout: float = 20.0
@@ -45,7 +47,11 @@ class AppConfig:
     max_download_retries: int = 3
     max_classify_retries: int = 2
     max_search_retries: int = 3
-    user_agent: str = "tifa-archivist/0.1"
+    user_agent: str = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Safari/537.36"
+    )
     xai: XAIConfig = field(default_factory=XAIConfig)
 
 
@@ -80,9 +86,13 @@ def load_config(path: Path | None) -> AppConfig:
         classify_concurrency=int(data.get("classify_concurrency", AppConfig.classify_concurrency)),
             max_results_per_query=int(data.get("max_results_per_query", AppConfig.max_results_per_query)),
             max_urls_multiplier=int(data.get("max_urls_multiplier", AppConfig.max_urls_multiplier)),
-            search_concurrency=int(data.get("search_concurrency", AppConfig.search_concurrency)),
-            skip_classify=bool(data.get("skip_classify", AppConfig.skip_classify)),
-            min_bytes=int(data.get("min_bytes", AppConfig.min_bytes)),
+        search_concurrency=int(data.get("search_concurrency", AppConfig.search_concurrency)),
+        skip_classify=bool(data.get("skip_classify", AppConfig.skip_classify)),
+        min_bytes=int(data.get("min_bytes", AppConfig.min_bytes)),
+        min_side=int(data.get("min_side", AppConfig.min_side)),
+        search_categories=list(data["search_categories"])
+        if data.get("search_categories")
+        else AppConfig.search_categories,
         search_queries=list(data.get("search_queries", DEFAULT_SEARCH_QUERIES)),
         phash_distance=int(data.get("phash_distance", AppConfig.phash_distance)),
         request_timeout=float(data.get("request_timeout", AppConfig.request_timeout)),
