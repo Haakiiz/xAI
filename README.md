@@ -6,7 +6,7 @@ classifies them with xAI/Grok vision, and sorts them into category folders.
 Features:
 - DuckDuckGo image search (safesearch off)
 - Async downloads and LLM classification with concurrency limits
-- Dedup by URL, sha256, and perceptual hash (phash)
+- Dedup by URL and sha256 (no image decoding step)
 - SQLite tracking for idempotent runs
 - Progress bar with URLs found, downloaded, classified, kept, discarded
 - NSFW allowed, but anything under 18 or ambiguous is discarded
@@ -34,6 +34,12 @@ python -m tifa_archivist run --limit 20 --out ./tifa_dataset
 python -m tifa_archivist stats --out ./tifa_dataset
 ```
 
+Skip classification (downloads only, saves to `other/`):
+
+```bash
+python -m tifa_archivist run --limit 20 --out ./tifa_dataset --skip-classify
+```
+
 ## Output
 
 Categories created under the output directory:
@@ -57,6 +63,10 @@ Also created:
   are skipped.
 - The classifier discards images with underage or ambiguous subjects.
 - To change models, update `xai.model_primary` and `xai.model_fallback` in `config.yaml`.
+- If you hit DDG rate limits, lower `search_concurrency` or reduce query count.
+- To control cost, tune `max_urls_multiplier` (global URL cap = limit * multiplier).
+- Only `.jpg/.jpeg/.png` URLs are queued; non-matching content-types are skipped.
+- Small or truncated files are rejected via `min_bytes` and Content-Length checks.
 
 ## Tests
 

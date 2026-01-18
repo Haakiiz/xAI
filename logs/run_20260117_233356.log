@@ -1,0 +1,217 @@
+2026-01-18 00:33:57,112 | WARNING | tifa_archivist.classify | vision check skipped: {"code":"Client specified an invalid argument","error":"Invalid request content: Failed to decode image buffer."}
+2026-01-18 00:33:57,326 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+nsfw 200
+2026-01-18 00:33:57,327 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7 200
+2026-01-18 00:33:57,328 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+fanart 200
+2026-01-18 00:33:57,331 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+2d+art 200
+2026-01-18 00:33:57,333 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+fanart 200
+2026-01-18 00:33:57,333 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+sfw 200
+2026-01-18 00:33:57,334 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+key+art 200
+2026-01-18 00:33:57,334 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+official+art 200
+2026-01-18 00:33:57,334 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k 200
+2026-01-18 00:33:57,335 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+wallpaper 200
+2026-01-18 00:33:57,335 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+screenshot 200
+2026-01-18 00:33:57,336 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+3d+render 200
+2026-01-18 00:33:57,337 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+key+art 200
+2026-01-18 00:33:57,337 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+remake 200
+2026-01-18 00:33:57,344 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+screenshot 200
+2026-01-18 00:33:57,344 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+nsfw 200
+2026-01-18 00:33:57,344 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+3d+render 200
+2026-01-18 00:33:57,344 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+official+art 200
+2026-01-18 00:33:57,344 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+2d+art 200
+2026-01-18 00:33:57,346 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+wallpaper 200
+2026-01-18 00:33:58,136 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+fanart&l=us-en&vqd=4-252702561858311435416975077099529861299&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,142 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+screenshot&l=us-en&vqd=4-233988239837322995263684530676260745866&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,142 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+remake&l=us-en&vqd=4-122801892637820793305020861480337666569&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,142 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+fanart&l=us-en&vqd=4-185773501253600070355898279302449024036&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,146 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+nsfw&l=us-en&vqd=4-163034954980485312425604744937318354899&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,146 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+key+art&l=us-en&vqd=4-180814468334308758631963199120523609690&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,146 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+wallpaper&l=us-en&vqd=4-266784729233396602599230400747106085092&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,147 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+key+art&l=us-en&vqd=4-164156339528940257224399585130293858564&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,150 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+2d+art&l=us-en&vqd=4-91171151332162779170379197728945664761&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,150 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+3d+render&l=us-en&vqd=4-38761523110900310555726756297487524111&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,153 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+3d+render&l=us-en&vqd=4-63297216118200272621445743321473474438&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,153 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+2d+art&l=us-en&vqd=4-275676685641578065493027417865675096626&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,153 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+official+art&l=us-en&vqd=4-231613280363193111193328630978987469006&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,153 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+wallpaper&l=us-en&vqd=4-205545499102468321072709891380474798884&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,154 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+screenshot&l=us-en&vqd=4-33381623023918700885662491908816941027&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,170 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30882369111239269315490136605359818598&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,185 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+sfw&l=us-en&vqd=4-58578686739069539422423126878358813010&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,189 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+official+art&l=us-en&vqd=4-33560258761464781805571139276531411274&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,189 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k&l=us-en&vqd=4-93662533915759784012759090665657107628&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:58,422 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+nsfw&l=us-en&vqd=4-157121760440594569231742019364412372472&p=-1&f=%2C%2C%2C%2C%2C 200
+2026-01-18 00:33:58,633 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+sfw 200
+2026-01-18 00:33:59,332 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+2d+art 200
+2026-01-18 00:33:59,389 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+2d+art 200
+2026-01-18 00:33:59,399 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7 200
+2026-01-18 00:33:59,402 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+remake 200
+2026-01-18 00:33:59,423 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+screenshot 200
+2026-01-18 00:33:59,428 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+wallpaper 200
+2026-01-18 00:33:59,439 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+sfw&l=us-en&vqd=4-70129741655551407479609239581910883974&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:33:59,490 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+fanart 202
+2026-01-18 00:33:59,502 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+screenshot 200
+2026-01-18 00:33:59,612 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+sfw 200
+2026-01-18 00:33:59,646 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+fanart 200
+2026-01-18 00:33:59,714 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+official+art 200
+2026-01-18 00:33:59,737 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+wallpaper 200
+2026-01-18 00:33:59,749 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k 200
+2026-01-18 00:33:59,806 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+3d+render 200
+2026-01-18 00:33:59,838 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+official+art 200
+2026-01-18 00:33:59,992 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+key+art 200
+2026-01-18 00:34:00,034 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+key+art 200
+2026-01-18 00:34:00,036 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+nsfw 200
+2026-01-18 00:34:00,057 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+3d+render 202
+2026-01-18 00:34:00,188 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+2d+art&l=us-en&vqd=4-91171151332162779170379197728945664761&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,203 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30882369111239269315490136605359818598&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,203 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+2d+art&l=us-en&vqd=4-275676685641578065493027417865675096626&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,219 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+remake&l=us-en&vqd=4-122801892637820793305020861480337666569&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,231 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+screenshot&l=us-en&vqd=4-233988239837322995263684530676260745866&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,294 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+wallpaper&l=us-en&vqd=4-266784729233396602599230400747106085092&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,302 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+screenshot&l=us-en&vqd=4-33381623023918700885662491908816941027&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,421 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+sfw&l=us-en&vqd=4-58578686739069539422423126878358813010&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,452 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+fanart&l=us-en&vqd=4-252702561858311435416975077099529861299&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,543 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+wallpaper&l=us-en&vqd=4-205545499102468321072709891380474798884&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,567 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k&l=us-en&vqd=4-93662533915759784012759090665657107628&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,567 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+official+art&l=us-en&vqd=4-231613280363193111193328630978987469006&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,614 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+3d+render&l=us-en&vqd=4-38761523110900310555726756297487524111&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,656 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+official+art&l=us-en&vqd=4-33560258761464781805571139276531411274&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,843 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+key+art&l=us-en&vqd=4-164156339528940257224399585130293858564&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,849 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+key+art&l=us-en&vqd=4-180814468334308758631963199120523609690&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:00,888 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+nsfw&l=us-en&vqd=4-163034954980485312425604744937318354899&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:01,363 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+sfw 200
+2026-01-18 00:34:01,841 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+fanart 200
+2026-01-18 00:34:02,159 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+sfw&l=us-en&vqd=4-70129741655551407479609239581910883974&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:02,506 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+screenshot 200
+2026-01-18 00:34:02,563 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+3d+render 200
+2026-01-18 00:34:02,701 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+sfw 202
+2026-01-18 00:34:02,701 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 sfw error=https://duckduckgo.com/?q=Tifa+Lockhart+FF7+sfw 202 Ratelimit
+2026-01-18 00:34:02,707 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+fanart&l=us-en&vqd=4-185773501253600070355898279302449024036&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:02,707 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 fanart error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+fanart&l=us-en&vqd=4-185773501253600070355898279302449024036&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:02,775 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+wallpaper 200
+2026-01-18 00:34:02,820 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+2d+art 200
+2026-01-18 00:34:02,894 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay 200
+2026-01-18 00:34:02,924 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+remake 200
+2026-01-18 00:34:02,941 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+screenshot 200
+2026-01-18 00:34:02,974 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k 200
+2026-01-18 00:34:03,045 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+official+art 200
+2026-01-18 00:34:03,173 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7 200
+2026-01-18 00:34:03,188 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+key+art 202
+2026-01-18 00:34:03,188 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k key art error=https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+key+art 202 Ratelimit
+2026-01-18 00:34:03,203 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+remake 200
+2026-01-18 00:34:03,270 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+3d+render 200
+2026-01-18 00:34:03,317 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+screenshot&l=us-en&vqd=4-233988239837322995263684530676260745866&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,317 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 screenshot error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+screenshot&l=us-en&vqd=4-233988239837322995263684530676260745866&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,326 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+official+art 202
+2026-01-18 00:34:03,326 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 official art error=https://duckduckgo.com/?q=Tifa+Lockhart+FF7+official+art 202 Ratelimit
+2026-01-18 00:34:03,340 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+fanart 200
+2026-01-18 00:34:03,362 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+fanart 200
+2026-01-18 00:34:03,369 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+3d+render&l=us-en&vqd=4-63297216118200272621445743321473474438&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,369 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k 3d render error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+3d+render&l=us-en&vqd=4-63297216118200272621445743321473474438&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,392 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+2d+art 200
+2026-01-18 00:34:03,543 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+3d+render 200
+2026-01-18 00:34:03,557 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+2d+art 202
+2026-01-18 00:34:03,558 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+key+art 200
+2026-01-18 00:34:03,571 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+wallpaper&l=us-en&vqd=4-266784729233396602599230400747106085092&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,571 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k wallpaper error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+wallpaper&l=us-en&vqd=4-266784729233396602599230400747106085092&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,617 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+2d+art&l=us-en&vqd=4-91171151332162779170379197728945664761&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,618 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 2d art error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+2d+art&l=us-en&vqd=4-91171151332162779170379197728945664761&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,667 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+nsfw 200
+2026-01-18 00:34:03,709 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+wallpaper 200
+2026-01-18 00:34:03,732 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+remake&l=us-en&vqd=4-32876742606741590883859325957478805692&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,743 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay&l=us-en&vqd=4-68373720121938400126698674207407525814&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,748 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+screenshot&l=us-en&vqd=4-33381623023918700885662491908816941027&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,748 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k screenshot error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+screenshot&l=us-en&vqd=4-33381623023918700885662491908816941027&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,752 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+screenshot 200
+2026-01-18 00:34:03,798 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+official+art 200
+2026-01-18 00:34:03,817 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k&l=us-en&vqd=4-93662533915759784012759090665657107628&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,817 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k&l=us-en&vqd=4-93662533915759784012759090665657107628&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,852 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+official+art&l=us-en&vqd=4-33560258761464781805571139276531411274&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,852 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k official art error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+official+art&l=us-en&vqd=4-33560258761464781805571139276531411274&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:03,856 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+key+art 200
+2026-01-18 00:34:03,929 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+wallpaper 200
+2026-01-18 00:34:03,975 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30882369111239269315490136605359818598&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:03,975 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30882369111239269315490136605359818598&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,012 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+nsfw 202
+2026-01-18 00:34:04,039 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+sfw 200
+2026-01-18 00:34:04,062 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+remake&l=us-en&vqd=4-122801892637820793305020861480337666569&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,062 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 remake error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+remake&l=us-en&vqd=4-122801892637820793305020861480337666569&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,125 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+3d+render&l=us-en&vqd=4-38761523110900310555726756297487524111&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,125 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 3d render error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+3d+render&l=us-en&vqd=4-38761523110900310555726756297487524111&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,146 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+fanart&l=us-en&vqd=4-252702561858311435416975077099529861299&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,146 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k fanart error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+fanart&l=us-en&vqd=4-252702561858311435416975077099529861299&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,154 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+remake 200
+2026-01-18 00:34:04,165 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+fanart&l=us-en&vqd=4-112654963174555678121612562378889524783&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,194 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+2d+art&l=us-en&vqd=4-275676685641578065493027417865675096626&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,195 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k 2d art error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+2d+art&l=us-en&vqd=4-275676685641578065493027417865675096626&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,233 | INFO | primp | response: https://duckduckgo.com/?q=%E3%83%86%E3%82%A3%E3%83%95%E3%82%A1+%E3%83%AD%E3%83%83%E3%82%AF%E3%83%8F%E3%83%BC%E3%83%88 200
+2026-01-18 00:34:04,314 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FFVII+remake 200
+2026-01-18 00:34:04,328 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+key+art 200
+2026-01-18 00:34:04,348 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+3d+render&l=us-en&vqd=4-282993324670060301542165598364955578426&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,363 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+key+art&l=us-en&vqd=4-210388457534047588523178973405463665226&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,383 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+portrait 202
+2026-01-18 00:34:04,475 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+nsfw&l=us-en&vqd=4-163034954980485312425604744937318354899&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,475 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k nsfw error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+wallpaper+4k+nsfw&l=us-en&vqd=4-163034954980485312425604744937318354899&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,513 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+wallpaper&l=us-en&vqd=4-205545499102468321072709891380474798884&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,513 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 wallpaper error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+wallpaper&l=us-en&vqd=4-205545499102468321072709891380474798884&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,567 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+screenshot&l=us-en&vqd=4-171134720515557589401691506755308418194&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,614 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+official+art&l=us-en&vqd=4-44030695250976141518920665136021216531&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,660 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+3d+render 202
+2026-01-18 00:34:04,667 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+key+art&l=us-en&vqd=4-164156339528940257224399585130293858564&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,667 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FF7 key art error=https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+key+art&l=us-en&vqd=4-164156339528940257224399585130293858564&p=-1&f=%2C%2C%2C%2C%2C 403 Ratelimit
+2026-01-18 00:34:04,730 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+wallpaper&l=us-en&vqd=4-318453729283439244704736545051715052432&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,841 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+sfw&l=us-en&vqd=4-18150087982858787735645958745408780722&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,968 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+cosplay+remake&l=us-en&vqd=4-226002493271781832970122306091219798930&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:04,983 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+sfw 202
+2026-01-18 00:34:04,983 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k sfw error=https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+sfw 202 Ratelimit
+2026-01-18 00:34:05,042 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=%E3%83%86%E3%82%A3%E3%83%95%E3%82%A1+%E3%83%AD%E3%83%83%E3%82%AF%E3%83%8F%E3%83%BC%E3%83%88&l=us-en&vqd=4-236858300520597396630027879766308809051&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:05,131 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FFVII+remake&l=us-en&vqd=4-119628327810424931312536872555124609439&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:05,174 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+key+art&l=us-en&vqd=4-264315610283614582188705888633803909479&p=-1&f=%2C%2C%2C%2C%2C 403
+2026-01-18 00:34:05,201 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+2d+art 202
+2026-01-18 00:34:05,285 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+remake 202
+2026-01-18 00:34:05,541 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay 202
+2026-01-18 00:34:05,851 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+3d+render 202
+2026-01-18 00:34:06,006 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+portrait 202
+2026-01-18 00:34:06,025 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+nsfw 202
+2026-01-18 00:34:06,088 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+fanart 202
+2026-01-18 00:34:06,226 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+3d+render 202
+2026-01-18 00:34:06,298 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+wallpaper 202
+2026-01-18 00:34:06,417 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+remake 202
+2026-01-18 00:34:06,441 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+key+art 202
+2026-01-18 00:34:06,494 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+screenshot 202
+2026-01-18 00:34:06,586 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+sfw 202
+2026-01-18 00:34:06,693 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+official+art 202
+2026-01-18 00:34:06,728 | INFO | primp | response: https://duckduckgo.com/?q=%E3%83%86%E3%82%A3%E3%83%95%E3%82%A1+%E3%83%AD%E3%83%83%E3%82%AF%E3%83%8F%E3%83%BC%E3%83%88 202
+2026-01-18 00:34:07,021 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FFVII+remake 202
+2026-01-18 00:34:07,345 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+key+art 202
+2026-01-18 00:34:07,635 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+remake 202
+2026-01-18 00:34:07,636 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart wallpaper 4k remake error=https://duckduckgo.com/?q=Tifa+Lockhart+wallpaper+4k+remake 202 Ratelimit
+2026-01-18 00:34:07,636 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+2d+art 202
+2026-01-18 00:34:07,636 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay 2d art error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+2d+art 202 Ratelimit
+2026-01-18 00:34:08,504 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+portrait 202
+2026-01-18 00:34:08,505 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart portrait error=https://duckduckgo.com/?q=Tifa+Lockhart+portrait 202 Ratelimit
+2026-01-18 00:34:08,675 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+wallpaper 202
+2026-01-18 00:34:08,675 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay wallpaper error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+wallpaper 202 Ratelimit
+2026-01-18 00:34:08,684 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay 202
+2026-01-18 00:34:08,684 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay 202 Ratelimit
+2026-01-18 00:34:08,871 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+3d+render 202
+2026-01-18 00:34:08,872 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay 3d render error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+3d+render 202 Ratelimit
+2026-01-18 00:34:08,911 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+fanart 202
+2026-01-18 00:34:08,911 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay fanart error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+fanart 202 Ratelimit
+2026-01-18 00:34:08,924 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+nsfw 202
+2026-01-18 00:34:08,924 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay nsfw error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+nsfw 202 Ratelimit
+2026-01-18 00:34:09,206 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+remake 202
+2026-01-18 00:34:09,207 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay remake error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+remake 202 Ratelimit
+2026-01-18 00:34:09,258 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+key+art 202
+2026-01-18 00:34:09,258 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay key art error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+key+art 202 Ratelimit
+2026-01-18 00:34:09,374 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+3d+render 202
+2026-01-18 00:34:09,374 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart 3d render error=https://duckduckgo.com/?q=Tifa+Lockhart+3d+render 202 Ratelimit
+2026-01-18 00:34:09,520 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+screenshot 202
+2026-01-18 00:34:09,520 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay screenshot error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+screenshot 202 Ratelimit
+2026-01-18 00:34:09,550 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+official+art 202
+2026-01-18 00:34:09,550 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay official art error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+official+art 202 Ratelimit
+2026-01-18 00:34:09,734 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+sfw 202
+2026-01-18 00:34:09,734 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart cosplay sfw error=https://duckduckgo.com/?q=Tifa+Lockhart+cosplay+sfw 202 Ratelimit
+2026-01-18 00:34:09,801 | INFO | primp | response: https://duckduckgo.com/?q=%E3%83%86%E3%82%A3%E3%83%95%E3%82%A1+%E3%83%AD%E3%83%83%E3%82%AF%E3%83%8F%E3%83%BC%E3%83%88 202
+2026-01-18 00:34:09,935 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+key+art 202
+2026-01-18 00:34:09,935 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart key art error=https://duckduckgo.com/?q=Tifa+Lockhart+key+art 202 Ratelimit
+2026-01-18 00:34:10,117 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FFVII+remake 202
+2026-01-18 00:34:10,117 | WARNING | tifa_archivist.search | search failed query=Tifa Lockhart FFVII remake error=https://duckduckgo.com/?q=Tifa+Lockhart+FFVII+remake 202 Ratelimit

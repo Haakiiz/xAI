@@ -1,0 +1,14 @@
+2026-01-18 01:39:04,204 | WARNING | tifa_archivist.orchestrator | classification disabled; underage filtering is not enforced
+2026-01-18 01:39:04,651 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+fanart 200
+2026-01-18 01:39:04,654 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7 200
+2026-01-18 01:39:05,008 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+fanart&l=us-en&vqd=4-185773124761372000025714574823467481812&p=-1 200
+2026-01-18 01:39:05,030 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30881442458650606076712370707360608662&p=-1 200
+2026-01-18 01:39:05,225 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+2d+art 200
+2026-01-18 01:39:05,252 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+3d+render 200
+2026-01-18 01:39:05,711 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+2d+art&l=us-en&vqd=4-91170774839934314522594138862533526537&p=-1 200
+2026-01-18 01:39:05,746 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+3d+render&l=us-en&vqd=4-38760583781805625554893243490774390783&p=-1 200
+2026-01-18 01:39:05,922 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+key+art 200
+2026-01-18 01:39:05,957 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+screenshot 200
+2026-01-18 01:39:06,268 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+key+art&l=us-en&vqd=4-164156627285626554780399052764218501108&p=-1 200
+2026-01-18 01:39:06,301 | INFO | tifa_archivist.orchestrator | search cap reached urls=80 max_urls=80
+2026-01-18 01:39:06,325 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+screenshot&l=us-en&vqd=4-233987128107746642625312171665844405370&p=-1 200

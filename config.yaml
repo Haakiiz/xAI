@@ -1,5 +1,5 @@
 xai:
-  api_key: ""
+  api_key: "REDACTED"
   base_url: "https://api.x.ai/v1"
   model_primary: "grok-4-1-fast-non-reasoning"
   model_fallback: "grok-2-vision-latest"
@@ -11,6 +11,10 @@ manifest: true
 download_concurrency: 8
 classify_concurrency: 3
 max_results_per_query: 80
+max_urls_multiplier: 2
+search_concurrency: 2
+skip_classify: false
+min_bytes: 15000
 phash_distance: 6
 request_timeout: 20
 max_bytes: 15000000

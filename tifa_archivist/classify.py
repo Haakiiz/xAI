@@ -34,6 +34,10 @@ class ModelNoVisionError(RuntimeError):
     pass
 
 
+class ImageDecodeError(RuntimeError):
+    pass
+
+
 def _guess_mime(data: bytes) -> str:
     kind = imghdr.what(None, data)
     if kind == "jpeg":
@@ -92,6 +96,18 @@ class XAIClassifier:
             payload = self._build_payload(self.model_fallback, test_bytes, use_schema=False)
             await self._post(session, payload)
             self.model_name = self.model_fallback
+            return self.model_name
+        except ImageDecodeError as exc:
+            self.logger.warning("vision check skipped: %s", exc)
+            self.model_name = self.model_primary
+            return self.model_name
+        except (asyncio.TimeoutError, aiohttp.ClientError) as exc:
+            self.logger.warning("vision check skipped (network): %s", exc)
+            self.model_name = self.model_primary
+            return self.model_name
+        except RuntimeError as exc:
+            self.logger.warning("vision check skipped (error): %s", exc)
+            self.model_name = self.model_primary
             return self.model_name
 
     async def classify(
@@ -171,6 +187,8 @@ class XAIClassifier:
             text = await resp.text()
             if resp.status >= 400:
                 message = self._extract_error_message(text)
+                if self._is_decode_error(message):
+                    raise ImageDecodeError(message)
                 if self._is_no_vision_error(message):
                     raise ModelNoVisionError(message)
                 raise RuntimeError(f"XAI API error {resp.status}: {message}")
@@ -201,6 +219,11 @@ class XAIClassifier:
         return "response_format" in msg or "json_schema" in msg or (
             "schema" in msg and "unsupported" in msg
         )
+
+    @staticmethod
+    def _is_decode_error(message: str) -> bool:
+        msg = message.lower()
+        return "decode" in msg and ("image" in msg or "buffer" in msg)
 
     def _parse_response(self, data: dict[str, Any]) -> ClassificationResult:
         choices = data.get("choices") or []

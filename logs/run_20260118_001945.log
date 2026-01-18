@@ -1,0 +1,6 @@
+2026-01-18 01:19:45,400 | WARNING | tifa_archivist.classify | vision check skipped: {"code":"Client specified an invalid argument","error":"Invalid request content: Failed to decode image buffer."}
+2026-01-18 01:19:45,784 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+fanart 200
+2026-01-18 01:19:45,795 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7 200
+2026-01-18 01:19:46,140 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+fanart&l=us-en&vqd=4-185773124761372000025714574823467481812&p=-1 200
+2026-01-18 01:19:46,177 | INFO | tifa_archivist.orchestrator | search cap reached urls=10 max_urls=10
+2026-01-18 01:19:46,214 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30881442458650606076712370707360608662&p=-1 200

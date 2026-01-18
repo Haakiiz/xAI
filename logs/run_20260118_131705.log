@@ -1,0 +1,20 @@
+2026-01-18 14:17:05,023 | WARNING | tifa_archivist.orchestrator | classification disabled; underage filtering is not enforced
+2026-01-18 14:17:05,555 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7 200
+2026-01-18 14:17:05,573 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+fanart 200
+2026-01-18 14:17:05,941 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+fanart&l=us-en&vqd=4-185771982608180633905151831123076808964&p=-1 200
+2026-01-18 14:17:06,163 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7&l=us-en&vqd=4-30881012725096699857038802223671249478&p=-1 200
+2026-01-18 14:17:06,167 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+2d+art 200
+2026-01-18 14:17:06,398 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+3d+render 200
+2026-01-18 14:17:06,573 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+2d+art&l=us-en&vqd=4-91167036538315397568433564381888397273&p=-1 200
+2026-01-18 14:17:06,770 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+3d+render&l=us-en&vqd=4-38765678469566928975803632329027578927&p=-1 200
+2026-01-18 14:17:06,808 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+key+art 200
+2026-01-18 14:17:07,056 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+screenshot 200
+2026-01-18 14:17:07,210 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+key+art&l=us-en&vqd=4-164157411961347761651822068534952942628&p=-1 200
+2026-01-18 14:17:07,435 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+screenshot&l=us-en&vqd=4-233989312269730509135839979820210323370&p=-1 200
+2026-01-18 14:17:07,443 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+official+art 200
+2026-01-18 14:17:07,655 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+wallpaper 200
+2026-01-18 14:17:08,056 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+official+art&l=us-en&vqd=4-231617111203307931799072833482354877934&p=-1 200
+2026-01-18 14:17:08,074 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+wallpaper&l=us-en&vqd=4-205543939892229715097554319450418654724&p=-1 200
+2026-01-18 14:17:08,107 | INFO | tifa_archivist.orchestrator | search cap reached urls=80 max_urls=80
+2026-01-18 14:17:08,278 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+FF7+nsfw 200
+2026-01-18 14:17:08,606 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+FF7+nsfw&l=us-en&vqd=4-157120236724574025796494579344271636696&p=-1 200
