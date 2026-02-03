@@ -10,13 +10,19 @@ from urllib.parse import urlparse
 import aiohttp
 from tqdm import tqdm
 
-from .classify import XAIClassifier
+from .classify import GeminiClassifier
 from .config import AppConfig
 from .db import ImageDB
 from .dedupe import compute_sha256
 from .download import fetch_image
 from .search import search_live_images
-from .utils import prepare_classification_bytes, slugify, utc_now_iso, validate_image_bytes
+from .utils import (
+    luma_stddev,
+    prepare_classification_bytes,
+    slugify,
+    utc_now_iso,
+    validate_image_bytes,
+)
 
 
 CATEGORIES = [
@@ -47,6 +53,15 @@ BLOCKED_HOSTS = {
     "www.rare-gallery.com",
     "wallpapersden.com",
     "images.wallpapersden.com",
+    "previewsworld.com",
+    "www.previewsworld.com",
+}
+CLASSIFY_SUPPORTED_MIME = {
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+    "image/heic",
+    "image/heif",
 }
 
 
@@ -168,8 +183,8 @@ async def progress_loop(counters: Counters, done_event: asyncio.Event, limit: in
 async def run_pipeline(config: AppConfig) -> None:
     logger = logging.getLogger(__name__)
 
-    if not config.xai.api_key:
-        raise ValueError("XAI API key missing. Set XAI_API_KEY or config.yaml.")
+    if not config.gemini.api_key:
+        raise ValueError("Gemini API key missing. Set GEMINI_API_KEY or config.yaml.")
 
     out_dir = config.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -243,21 +258,21 @@ async def run_pipeline(config: AppConfig) -> None:
         headers={
             "User-Agent": config.user_agent,
             "Accept": "image/jpeg,image/png,image/*;q=0.8,*/*;q=0.5",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
         }
     ) as session:
-        classifier: XAIClassifier | None = None
+        classifier: GeminiClassifier | None = None
         if not config.skip_classify:
-            classifier = XAIClassifier(
-                api_key=config.xai.api_key,
-                base_url=config.xai.base_url,
-                model_primary=config.xai.model_primary,
-                model_fallback=config.xai.model_fallback,
+            classifier = GeminiClassifier(
+                api_key=config.gemini.api_key,
+                base_url=config.gemini.base_url,
+                model=config.gemini.model,
                 timeout=config.request_timeout,
                 max_retries=config.max_classify_retries,
                 semaphore=asyncio.Semaphore(config.classify_concurrency),
             )
-
-            await classifier.check_vision_support(session)
 
         async def search_task(category: str) -> None:
             if search_stop_event.is_set():
@@ -314,30 +329,47 @@ async def run_pipeline(config: AppConfig) -> None:
                     if stop_event.is_set():
                         continue
 
-                    data, content_type = await fetch_image(
-                        url,
-                        session,
-                        download_sema,
-                        timeout,
-                        config.max_bytes,
-                        config.max_download_retries,
-                        config.min_bytes,
-                    )
+                    data = None
+                    content_type = None
+                    sniffed_mime = None
+                    decoded = False
+                    reason = "download_failed"
+                    size = None
+                    for attempt in range(config.decode_retry_attempts + 1):
+                        data, content_type = await fetch_image(
+                            url,
+                            session,
+                            download_sema,
+                            timeout,
+                            config.max_bytes,
+                            config.max_download_retries,
+                            config.min_bytes,
+                        )
+                        if not data:
+                            continue
+                        await counters.inc("downloaded")
+                        valid, reason, size, sniffed_mime, decoded = validate_image_bytes(
+                            data, config.min_side
+                        )
+                        if valid:
+                            break
+                        if reason != "decode_failed":
+                            break
                     if not data:
-                        continue
-                    await counters.inc("downloaded")
-
-                    sha256 = compute_sha256(data)
-                    if db.has_sha256(sha256):
-                        db.insert_record(url, sha256, None, None, "discard", "dedupe", 1.0)
-                        await counters.inc("discarded")
                         continue
 
                     phash = None
+                    sha256 = None
 
-                    valid, reason, size, sniffed_mime, decoded = validate_image_bytes(
-                        data, config.min_side
-                    )
+                    if (
+                        not valid
+                        and reason == "decode_failed"
+                        and sniffed_mime in CLASSIFY_SUPPORTED_MIME
+                        and config.allow_undecoded
+                    ):
+                        valid = True
+                        decoded = False
+                        reason = "decode_failed_allowed"
                     if not valid:
                         db.insert_record(
                             url,
@@ -362,6 +394,31 @@ async def run_pipeline(config: AppConfig) -> None:
                                 "discarded invalid image url=%s reason=%s", url, reason
                             )
                         continue
+
+                    sha256 = compute_sha256(data)
+                    if db.has_sha256(sha256):
+                        db.insert_record(url, sha256, None, None, "discard", "dedupe", 1.0)
+                        await counters.inc("discarded")
+                        continue
+                    if decoded and config.min_luma_stddev > 0:
+                        stddev = luma_stddev(data)
+                        if stddev is not None and stddev < config.min_luma_stddev:
+                            db.insert_record(
+                                url,
+                                sha256,
+                                None,
+                                None,
+                                "discard",
+                                "low_variance",
+                                0.0,
+                            )
+                            await counters.inc("discarded")
+                            logger.info(
+                                "discarded low variance url=%s stddev=%.2f",
+                                url,
+                                stddev,
+                            )
+                            continue
                     if sniffed_mime and (
                         not content_type
                         or content_type in {"application/octet-stream", "binary/octet-stream"}
@@ -391,6 +448,7 @@ async def run_pipeline(config: AppConfig) -> None:
                         await counters.inc("classified")
                     else:
                         classify_bytes = None
+                        classify_mime = sniffed_mime or content_type
                         if decoded:
                             classify_bytes = prepare_classification_bytes(data)
                             if classify_bytes is None:
@@ -399,42 +457,78 @@ async def run_pipeline(config: AppConfig) -> None:
                                     "image prep failed url=%s reason=decode_failed",
                                     url,
                                 )
-                    if not config.skip_classify and not decoded:
-                        result_label = "other"
-                        result_model = "undecoded"
-                        result_confidence = 1.0
-                        await counters.inc("classified")
-                    elif not config.skip_classify:
-                        assert classifier is not None
-                        try:
-                            result = await classifier.classify(session, classify_bytes or data)
-                        except Exception as exc:
-                            logger.warning(
-                                "classification failed url=%s error=%s", url, exc
-                            )
-                            result_label = "other"
-                            result_model = "classify_error"
-                            result_confidence = 0.0
-                            await counters.inc("classified")
+                        if not decoded:
+                            if classify_mime in CLASSIFY_SUPPORTED_MIME:
+                                assert classifier is not None
+                                try:
+                                    result = await classifier.classify(
+                                        session, data, classify_mime
+                                    )
+                                except Exception as exc:
+                                    logger.warning(
+                                        "classification failed url=%s error=%s", url, exc
+                                    )
+                                    result_label = "other"
+                                    result_model = "classify_error"
+                                    result_confidence = 0.0
+                                    await counters.inc("classified")
+                                else:
+                                    await counters.inc("classified")
+
+                                    if result.is_underage_or_ambiguous or result.label == "discard":
+                                        db.insert_record(
+                                            url,
+                                            sha256,
+                                            phash,
+                                            None,
+                                            "discard",
+                                            config.gemini.model,
+                                            result.confidence,
+                                        )
+                                        await counters.inc("discarded")
+                                        continue
+
+                                    result_label = result.label
+                                    result_model = config.gemini.model
+                                    result_confidence = result.confidence
+                            else:
+                                result_label = "other"
+                                result_model = "undecoded"
+                                result_confidence = 1.0
+                                await counters.inc("classified")
                         else:
-                            await counters.inc("classified")
-
-                            if result.is_underage_or_ambiguous or result.label == "discard":
-                                db.insert_record(
-                                    url,
-                                    sha256,
-                                    phash,
-                                    None,
-                                    "discard",
-                                    classifier.model_name,
-                                    result.confidence,
+                            assert classifier is not None
+                            try:
+                                result = await classifier.classify(
+                                    session, classify_bytes or data, classify_mime
                                 )
-                                await counters.inc("discarded")
-                                continue
+                            except Exception as exc:
+                                logger.warning(
+                                    "classification failed url=%s error=%s", url, exc
+                                )
+                                result_label = "other"
+                                result_model = "classify_error"
+                                result_confidence = 0.0
+                                await counters.inc("classified")
+                            else:
+                                await counters.inc("classified")
 
-                            result_label = result.label
-                            result_model = classifier.model_name
-                            result_confidence = result.confidence
+                                if result.is_underage_or_ambiguous or result.label == "discard":
+                                    db.insert_record(
+                                        url,
+                                        sha256,
+                                        phash,
+                                        None,
+                                        "discard",
+                                        config.gemini.model,
+                                        result.confidence,
+                                    )
+                                    await counters.inc("discarded")
+                                    continue
+
+                                result_label = result.label
+                                result_model = config.gemini.model
+                                result_confidence = result.confidence
 
                     reserved = await counters.reserve_kept(config.limit)
                     if not reserved:
