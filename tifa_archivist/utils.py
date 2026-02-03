@@ -4,6 +4,8 @@ import re
 from io import BytesIO
 from datetime import datetime, timezone
 
+import math
+
 from PIL import Image, ImageFile, ImageStat
 
 def slugify(text: str, max_len: int = 32) -> str:
@@ -98,24 +100,90 @@ def prepare_classification_bytes(data: bytes, max_side: int | None = None) -> by
             image.save(output, format="JPEG", quality=90, optimize=True)
             return output.getvalue()
     except Exception:
-        return None
+        try:
+            ImageFile.LOAD_TRUNCATED_IMAGES = True
+            with Image.open(BytesIO(data)) as image:
+                image.load()
+                image = image.convert("RGB")
+                if max_side and max(image.size) > max_side:
+                    image.thumbnail((max_side, max_side), Image.LANCZOS)
+                output = BytesIO()
+                image.save(output, format="JPEG", quality=90, optimize=True)
+                return output.getvalue()
+        except Exception:
+            return None
     finally:
         ImageFile.LOAD_TRUNCATED_IMAGES = False
 
 
-def luma_stddev(data: bytes, max_side: int = 128) -> float | None:
+def image_quality_metrics(
+    data: bytes,
+    max_side: int = 256,
+    grid_size: int = 8,
+    tile_stddev_max: float = 4.0,
+) -> tuple[float | None, float | None, float | None, float | None, float | None]:
     try:
-        ImageFile.LOAD_TRUNCATED_IMAGES = False
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
         with Image.open(BytesIO(data)) as image:
             image.load()
-            image = image.convert("L")
             if max_side and max(image.size) > max_side:
                 image.thumbnail((max_side, max_side), Image.BILINEAR)
-            stat = ImageStat.Stat(image)
-            if not stat.stddev:
-                return None
-            return float(stat.stddev[0])
+            rgb = image.convert("RGB")
+            luma = rgb.convert("L")
+            luma_stat = ImageStat.Stat(luma)
+            luma_stddev = float(luma_stat.stddev[0]) if luma_stat.stddev else None
+            hsv = rgb.convert("HSV")
+            sat = hsv.split()[1]
+            sat_stat = ImageStat.Stat(sat)
+            sat_stddev = float(sat_stat.stddev[0]) if sat_stat.stddev else None
+            sat_mean = float(sat_stat.mean[0]) if sat_stat.mean else None
+            flat_ratio = None
+            if grid_size > 0 and tile_stddev_max > 0:
+                width, height = luma.size
+                tiles_x = min(grid_size, max(1, width))
+                tiles_y = min(grid_size, max(1, height))
+                tile_w = max(1, width // tiles_x)
+                tile_h = max(1, height // tiles_y)
+                flat = 0
+                total = 0
+                for y in range(0, height, tile_h):
+                    for x in range(0, width, tile_w):
+                        box = (x, y, min(x + tile_w, width), min(y + tile_h, height))
+                        tile = luma.crop(box)
+                        stat = ImageStat.Stat(tile)
+                        stddev = float(stat.stddev[0]) if stat.stddev else 0.0
+                        if stddev < tile_stddev_max:
+                            flat += 1
+                        total += 1
+                if total > 0:
+                    flat_ratio = flat / total
+            pixels = list(rgb.getdata())
+            if not pixels:
+                return luma_stddev, sat_stddev, sat_mean, None
+            sum_rg = 0.0
+            sum_rg2 = 0.0
+            sum_yb = 0.0
+            sum_yb2 = 0.0
+            count = 0
+            for r, g, b in pixels:
+                rg = float(r) - float(g)
+                yb = 0.5 * (float(r) + float(g)) - float(b)
+                sum_rg += rg
+                sum_rg2 += rg * rg
+                sum_yb += yb
+                sum_yb2 += yb * yb
+                count += 1
+            mean_rg = sum_rg / count
+            mean_yb = sum_yb / count
+            var_rg = max(0.0, (sum_rg2 / count) - (mean_rg * mean_rg))
+            var_yb = max(0.0, (sum_yb2 / count) - (mean_yb * mean_yb))
+            std_rg = math.sqrt(var_rg)
+            std_yb = math.sqrt(var_yb)
+            colorfulness = math.sqrt(std_rg * std_rg + std_yb * std_yb) + 0.3 * math.sqrt(
+                mean_rg * mean_rg + mean_yb * mean_yb
+            )
+            return luma_stddev, sat_stddev, sat_mean, colorfulness, flat_ratio
     except Exception:
-        return None
+        return None, None, None, None, None
     finally:
         ImageFile.LOAD_TRUNCATED_IMAGES = False
