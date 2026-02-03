@@ -56,7 +56,16 @@ class AppConfig:
     max_search_retries: int = 3
     decode_retry_attempts: int = 2
     allow_undecoded: bool = False
+    allow_truncated: bool = True
     min_luma_stddev: float = 3.0
+    min_sat_stddev: float = 2.0
+    min_sat_mean: float = 5.0
+    min_colorfulness: float = 5.0
+    variance_max_side: int = 256
+    flat_grid_size: int = 8
+    flat_tile_stddev_max: float = 4.0
+    flat_tile_ratio: float = 0.35
+    classify_max_side: int = 2048
     user_agent: str = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -143,7 +152,18 @@ def load_config(path: Path | None) -> AppConfig:
         max_search_retries=int(data.get("max_search_retries", AppConfig.max_search_retries)),
         decode_retry_attempts=int(data.get("decode_retry_attempts", AppConfig.decode_retry_attempts)),
         allow_undecoded=bool(data.get("allow_undecoded", AppConfig.allow_undecoded)),
+        allow_truncated=bool(data.get("allow_truncated", AppConfig.allow_truncated)),
         min_luma_stddev=float(data.get("min_luma_stddev", AppConfig.min_luma_stddev)),
+        min_sat_stddev=float(data.get("min_sat_stddev", AppConfig.min_sat_stddev)),
+        min_sat_mean=float(data.get("min_sat_mean", AppConfig.min_sat_mean)),
+        min_colorfulness=float(data.get("min_colorfulness", AppConfig.min_colorfulness)),
+        variance_max_side=int(data.get("variance_max_side", AppConfig.variance_max_side)),
+        flat_grid_size=int(data.get("flat_grid_size", AppConfig.flat_grid_size)),
+        flat_tile_stddev_max=float(
+            data.get("flat_tile_stddev_max", AppConfig.flat_tile_stddev_max)
+        ),
+        flat_tile_ratio=float(data.get("flat_tile_ratio", AppConfig.flat_tile_ratio)),
+        classify_max_side=int(data.get("classify_max_side", AppConfig.classify_max_side)),
         user_agent=str(data.get("user_agent", AppConfig.user_agent)),
         xai=xai,
         gemini=gemini,

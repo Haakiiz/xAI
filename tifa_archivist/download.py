@@ -29,7 +29,7 @@ ALLOWED_CONTENT_TYPES = {
     "binary/octet-stream",
 }
 
-RETRY_STATUSES = {429, 403, 502, 503, 504}
+RETRY_STATUSES = {429, 502, 503, 504}
 _HOST_COOLDOWN: dict[str, float] = {}
 _HOST_COOLDOWN_LOCK = asyncio.Lock()
 
@@ -104,6 +104,13 @@ async def fetch_image(
                             retry_after = _parse_retry_after(
                                 resp.headers.get("Retry-After")
                             )
+                        if resp.status in {403, 404}:
+                            logger.debug(
+                                "non-retryable status url=%s status=%s",
+                                url,
+                                resp.status,
+                            )
+                            raise FetchError(f"status {resp.status}")
                         raise FetchError(
                             f"status {resp.status}",
                             retry_after=retry_after,

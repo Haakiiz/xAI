@@ -17,7 +17,7 @@ from .dedupe import compute_sha256
 from .download import fetch_image
 from .search import search_live_images
 from .utils import (
-    luma_stddev,
+    image_quality_metrics,
     prepare_classification_bytes,
     slugify,
     utc_now_iso,
@@ -48,6 +48,31 @@ ALLOWED_EXTENSIONS = {
     ".tif",
     ".tiff",
 }
+THUMBNAIL_PATTERNS = (
+    "/thumb/",
+    "/thumbs/",
+    "/thumbnail/",
+    "/thumbnails/",
+    "/preview/",
+    "/previews/",
+    "preview.",
+    "thumb.",
+    "thumbnail.",
+    "small.",
+    "avatar.",
+    "icon.",
+    "s=small",
+    "size=small",
+    "size=thumb",
+    "w=150",
+    "w=200",
+    "w=300",
+    "w=400",
+    "h=150",
+    "h=200",
+    "h=300",
+    "h=400",
+)
 BLOCKED_HOSTS = {
     "rare-gallery.com",
     "www.rare-gallery.com",
@@ -55,6 +80,12 @@ BLOCKED_HOSTS = {
     "images.wallpapersden.com",
     "previewsworld.com",
     "www.previewsworld.com",
+    "cdn.donmai.us",
+    "donmai.us",
+    "tulip.paheal.net",
+    "lotus.paheal.net",
+    "rule34.xxx",
+    "us.rule34.xxx",
 }
 CLASSIFY_SUPPORTED_MIME = {
     "image/png",
@@ -234,6 +265,10 @@ async def run_pipeline(config: AppConfig) -> None:
         parsed = urlparse(url)
         if parsed.hostname and parsed.hostname.lower() in BLOCKED_HOSTS:
             return False
+        candidate = (parsed.path + ("?" + parsed.query if parsed.query else "")).lower()
+        for pattern in THUMBNAIL_PATTERNS:
+            if pattern in candidate:
+                return False
         ext = Path(parsed.path).suffix.lower()
         if ext and ext not in ALLOWED_EXTENSIONS:
             return False
@@ -370,6 +405,9 @@ async def run_pipeline(config: AppConfig) -> None:
                         valid = True
                         decoded = False
                         reason = "decode_failed_allowed"
+                    if valid and reason == "truncated_ok" and not config.allow_truncated:
+                        valid = False
+                        reason = "truncated"
                     if not valid:
                         db.insert_record(
                             url,
@@ -400,9 +438,50 @@ async def run_pipeline(config: AppConfig) -> None:
                         db.insert_record(url, sha256, None, None, "discard", "dedupe", 1.0)
                         await counters.inc("discarded")
                         continue
-                    if decoded and config.min_luma_stddev > 0:
-                        stddev = luma_stddev(data)
-                        if stddev is not None and stddev < config.min_luma_stddev:
+                    if decoded and (
+                        config.min_luma_stddev > 0
+                        or config.min_sat_stddev > 0
+                        or config.min_sat_mean > 0
+                        or config.min_colorfulness > 0
+                        or config.flat_tile_ratio > 0
+                    ):
+                        (
+                            luma_stddev,
+                            sat_stddev,
+                            sat_mean,
+                            colorfulness,
+                            flat_ratio,
+                        ) = image_quality_metrics(
+                            data,
+                            config.variance_max_side,
+                            config.flat_grid_size,
+                            config.flat_tile_stddev_max,
+                        )
+                        low_luma = (
+                            luma_stddev is not None
+                            and luma_stddev < config.min_luma_stddev
+                        )
+                        low_sat_std = (
+                            sat_stddev is not None
+                            and sat_stddev < config.min_sat_stddev
+                        )
+                        low_sat_mean = (
+                            sat_mean is not None and sat_mean < config.min_sat_mean
+                        )
+                        low_color = (
+                            colorfulness is not None
+                            and colorfulness < config.min_colorfulness
+                        )
+                        high_flat_ratio = (
+                            flat_ratio is not None
+                            and flat_ratio >= config.flat_tile_ratio
+                        )
+                        if (
+                            (low_luma and low_sat_std)
+                            or (low_sat_mean and low_sat_std)
+                            or (low_color and low_sat_std)
+                            or (high_flat_ratio and low_sat_std)
+                        ):
                             db.insert_record(
                                 url,
                                 sha256,
@@ -414,9 +493,13 @@ async def run_pipeline(config: AppConfig) -> None:
                             )
                             await counters.inc("discarded")
                             logger.info(
-                                "discarded low variance url=%s stddev=%.2f",
+                                "discarded low variance url=%s luma_stddev=%.2f sat_stddev=%.2f sat_mean=%.2f colorfulness=%.2f flat_ratio=%.2f",
                                 url,
-                                stddev,
+                                luma_stddev or 0.0,
+                                sat_stddev or 0.0,
+                                sat_mean or 0.0,
+                                colorfulness or 0.0,
+                                flat_ratio or 0.0,
                             )
                             continue
                     if sniffed_mime and (
@@ -450,7 +533,9 @@ async def run_pipeline(config: AppConfig) -> None:
                         classify_bytes = None
                         classify_mime = sniffed_mime or content_type
                         if decoded:
-                            classify_bytes = prepare_classification_bytes(data)
+                            classify_bytes = prepare_classification_bytes(
+                                data, config.classify_max_side
+                            )
                             if classify_bytes is None:
                                 decoded = False
                                 logger.info(

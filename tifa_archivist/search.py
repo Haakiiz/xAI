@@ -58,6 +58,12 @@ EXCLUDED_SITES = [
     "rare-gallery.com",
     "wallpapersden.com",
     "images.wallpapersden.com",
+    "cdn.donmai.us",
+    "donmai.us",
+    "tulip.paheal.net",
+    "lotus.paheal.net",
+    "rule34.xxx",
+    "us.rule34.xxx",
 ]
 
 QUERY_SYSTEM_PROMPT = (
