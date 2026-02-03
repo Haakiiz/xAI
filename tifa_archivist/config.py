@@ -24,13 +24,20 @@ class XAIConfig:
 
 
 @dataclass
+class GeminiConfig:
+    api_key: str = ""
+    base_url: str = "https://generativelanguage.googleapis.com/v1beta"
+    model: str = "gemini-3-flash-preview"
+
+
+@dataclass
 class AppConfig:
     out_dir: Path = Path("tifa_dataset")
     limit: int = 20
     db_path: Path = Path("images.db")
     log_dir: Path = Path("logs")
     manifest: bool = True
-    download_concurrency: int = 8
+    download_concurrency: int = 3
     classify_concurrency: int = 3
     max_results_per_query: int = 80
     max_urls_multiplier: int = 10
@@ -47,18 +54,40 @@ class AppConfig:
     max_download_retries: int = 3
     max_classify_retries: int = 2
     max_search_retries: int = 3
+    decode_retry_attempts: int = 2
+    allow_undecoded: bool = False
+    min_luma_stddev: float = 3.0
     user_agent: str = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/120.0.0.0 Safari/537.36"
     )
     xai: XAIConfig = field(default_factory=XAIConfig)
+    gemini: GeminiConfig = field(default_factory=GeminiConfig)
 
 
 DEFAULT_CONFIG_PATH = Path("config.yaml")
+DEFAULT_ENV_PATH = Path(".env")
+
+
+def _load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def load_config(path: Path | None) -> AppConfig:
+    _load_env_file(DEFAULT_ENV_PATH)
     data = {}
     if path and path.exists():
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -70,6 +99,17 @@ def load_config(path: Path | None) -> AppConfig:
         base_url=xai_data.get("base_url", XAIConfig.base_url),
         model_primary=xai_data.get("model_primary", XAIConfig.model_primary),
         model_fallback=xai_data.get("model_fallback", XAIConfig.model_fallback),
+    )
+    gemini_data = data.get("gemini", {})
+    gemini_key = (
+        os.getenv("GEMINI_API_KEY")
+        or os.getenv("GOOGLE_API_KEY")
+        or gemini_data.get("api_key", "")
+    )
+    gemini = GeminiConfig(
+        api_key=gemini_key,
+        base_url=gemini_data.get("base_url", GeminiConfig.base_url),
+        model=gemini_data.get("model", GeminiConfig.model),
     )
 
     out_dir = Path(data.get("out_dir", AppConfig.out_dir))
@@ -101,6 +141,10 @@ def load_config(path: Path | None) -> AppConfig:
         max_download_retries=int(data.get("max_download_retries", AppConfig.max_download_retries)),
         max_classify_retries=int(data.get("max_classify_retries", AppConfig.max_classify_retries)),
         max_search_retries=int(data.get("max_search_retries", AppConfig.max_search_retries)),
+        decode_retry_attempts=int(data.get("decode_retry_attempts", AppConfig.decode_retry_attempts)),
+        allow_undecoded=bool(data.get("allow_undecoded", AppConfig.allow_undecoded)),
+        min_luma_stddev=float(data.get("min_luma_stddev", AppConfig.min_luma_stddev)),
         user_agent=str(data.get("user_agent", AppConfig.user_agent)),
         xai=xai,
+        gemini=gemini,
     )

@@ -21,10 +21,18 @@ pip install -r requirements.txt
 
 ## Configure
 
-Edit `config.yaml` or set an environment variable:
+Use `.env` (preferred) or set environment variables:
 
 ```bash
 setx XAI_API_KEY "YOUR_KEY"
+setx GEMINI_API_KEY "YOUR_KEY"
+```
+
+`.env` example:
+
+```bash
+XAI_API_KEY=your_xai_key
+GOOGLE_API_KEY=your_gemini_key
 ```
 
 If you edit `config.yaml`, make sure it is ignored by git.
@@ -76,15 +84,18 @@ Also created:
 - The run is idempotent: previously seen URLs, sha256 hashes, or near-duplicate phashes
   are skipped.
 - The classifier discards images with underage or ambiguous subjects.
-- To change models, update `xai.model_primary` and `xai.model_fallback` in `config.yaml`.
-- LLM query generation requires an xAI API key even when `--skip-classify` is used.
+- To change models, update `gemini.model` for classification and `xai.model_primary`
+  for search in `config.yaml`.
+- LLM query generation (search) requires an xAI API key even when `--skip-classify`
+  is used. Classification uses Gemini.
 - If you hit xAI or DDG rate limits, lower `search_concurrency` or reduce categories.
+- If you see lots of partial/gray images, lower `download_concurrency` and increase
+  `decode_retry_attempts` in `config.yaml`.
 - To search only specific categories, set `search_categories` in `config.yaml`
   (example: `["wallpaper"]`).
 - To control cost, tune `max_urls_multiplier` (global URL cap = limit * multiplier).
 - Only `.jpg/.jpeg/.png` URLs are queued; non-matching content-types are skipped.
-- Small, corrupted, or truncated files are rejected via `min_bytes`, decode checks, and
-  Content-Length validation.
+- Small or corrupted files are rejected via `min_bytes` and strict decode checks.
 - To reduce pixelated results, raise `min_side` in `config.yaml` (default is 512).
 
 ## Tests
