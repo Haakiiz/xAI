@@ -477,10 +477,10 @@ async def run_pipeline(config: AppConfig) -> None:
                             and flat_ratio >= config.flat_tile_ratio
                         )
                         if (
-                            (low_luma and low_sat_std)
+                            high_flat_ratio
+                            or (low_luma and low_sat_std)
                             or (low_sat_mean and low_sat_std)
                             or (low_color and low_sat_std)
-                            or (high_flat_ratio and low_sat_std)
                         ):
                             db.insert_record(
                                 url,

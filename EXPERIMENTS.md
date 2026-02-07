@@ -12,3 +12,5 @@ Use this to record every change we try and the observed result. Keep entries sho
 | 2026-02-03 | Fix LLM audit crash | Fix as_completed KeyError | quality_audit.py | pending | Pending | Re-run LLM audit |
 | 2026-02-03 | Surface LLM results | Include LLM gray/low in report + flags | quality_audit.py | pending | Pending | Re-run audit and review QUALITYREPORT.MD |
 | 2026-02-03 | LLM audit result | LLM flagged 19/20 gray/low | QUALITYREPORT.MD | logs/run_20260203_221825.log | Metrics missed gray blocks; need flat-tile ratio | Add flat-tile filter |
+| 2026-02-04 | LLM audit result | LLM flagged 17/20 gray/low; flat_ratio high | QUALITYREPORT.MD | logs/run_20260203_232038.log | Gray blocks persist; flat_ratio useful | Discard on flat_ratio alone |
+| 2026-02-04 | Tighten gray filter | Discard if flat_ratio >= threshold | orchestrator.py | pending | Pending | Run batch and re-audit |
