@@ -103,3 +103,27 @@ Also created:
 ```bash
 pytest -q
 ```
+
+
+<!-- codex:review:start -->
+## Project Review (Auto)
+Purpose: A Python 3.11+ CLI tool that searches for Tifa Lockhart images, downloads them, classifies them with xAI/Grok vision, and sorts them into category folders.
+Entry points:
+- module: `python -m tifa_archivist`
+Install (inferred):
+- `pip install -r requirements.txt`
+Run (inferred):
+- `python -m tifa_archivist`
+Tests (inferred):
+- `python -m pytest`
+Configs:
+- `requirements.txt`
+Notable dirs:
+- `scripts/`
+- `tests/`
+Dependencies (selected):
+- `numpy`
+- `pytest`
+<!-- codex:review:end -->
+
+Signed-off-by: gpt-5.3-codex — 2026-02-07
