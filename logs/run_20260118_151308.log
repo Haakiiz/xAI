@@ -1,6 +1,0 @@
-2026-01-18 16:13:08,779 | WARNING | tifa_archivist.classify | vision check skipped: {"code":"Client specified an invalid argument","error":"Invalid request content: Failed to decode image buffer."}
-2026-01-18 16:13:13,198 | INFO | tifa_archivist.search | live search category=original_game query=Tifa Lockhart original game images FF7 key art screenshot official art results=7
-2026-01-18 16:13:13,312 | INFO | tifa_archivist.search | live search category=wallpaper query=Tifa Lockhart wallpaper 4k FF7 results=6
-2026-01-18 16:13:17,570 | INFO | tifa_archivist.search | live search category=fanart_2d query=Tifa Lockhart fanart 2D art FF7 results=8
-2026-01-18 16:13:17,570 | INFO | tifa_archivist.orchestrator | search cap reached urls=10 max_urls=10
-2026-01-18 16:13:18,147 | INFO | tifa_archivist.search | live search category=cosplay query=Tifa Lockhart cosplay high quality images results=10

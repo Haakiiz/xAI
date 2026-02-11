@@ -1,1 +1,0 @@
-2026-01-18 22:00:52,853 | WARNING | tifa_archivist.classify | vision check skipped: {"code":"Client specified an invalid argument","error":"Invalid request content: Failed to decode image buffer."}
