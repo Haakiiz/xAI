@@ -1,0 +1,20 @@
+2026-01-22 23:47:38,810 | WARNING | tifa_archivist.classify | vision check skipped: {"code":"Client specified an invalid argument","error":"Invalid request content: Failed to decode image buffer."}
+2026-01-22 23:47:39,739 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+Final+Fantasy+VII+wallpaper+4k+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com 200
+2026-01-22 23:47:40,090 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+Final+Fantasy+VII+wallpaper+4k+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com&l=us-en&vqd=4-44118503713731734981771842273567156631&p=-1 200
+2026-01-22 23:47:40,122 | INFO | tifa_archivist.search | image search category=wallpaper query=Tifa Lockhart Final Fantasy VII wallpaper 4k -site:rare-gallery.com -site:wallpapersden.com -site:images.wallpapersden.com results=80 source=ddg
+2026-01-22 23:47:40,123 | INFO | tifa_archivist.orchestrator | search cap reached urls=15 max_urls=15
+2026-01-22 23:47:40,162 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://wallpapers.com/images/hd/tifa-lockhart-4k-wallpaper-68qushxi0ujmisu0.jpg reason=decode_failed
+2026-01-22 23:47:40,174 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://wallpapercave.com/wp/wp5462927.jpg reason=decode_failed
+2026-01-22 23:47:40,190 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://wallpapercave.com/wp/wp5965634.jpg reason=decode_failed
+2026-01-22 23:47:40,197 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://images6.alphacoders.com/436/436981.jpg reason=decode_failed
+2026-01-22 23:47:40,211 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://wallpapers.com/images/hd/tifa-lockhart-4k-wallpaper-a83flpornh11vqz8.jpg reason=decode_failed
+2026-01-22 23:47:40,239 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://cdn.wallpapersafari.com/70/80/mMv1OQ.jpg reason=decode_failed
+2026-01-22 23:47:40,247 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://4.bp.blogspot.com/-G_J0akO_F30/XQ8e1Cf554I/AAAAAAAAHtY/fXSLWRvdXfkusN1p8VIzo87BMJVOt6YFQCKgBGAs/w0/tifa-lockhart-final-fantasy-7-remake-uhdpaper.com-4K-37.jpg reason=decode_failed
+2026-01-22 23:47:40,254 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://images.hdqwalls.com/wallpapers/tifa-lockhart-final-fantasy-7-remake-4k-cu.jpg reason=decode_failed
+2026-01-22 23:47:40,261 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://images.hdqwalls.com/wallpapers/tifa-lockhart-in-final-fantasy-vii-po.jpg reason=decode_failed
+2026-01-22 23:47:40,271 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://motionbgs.com/media/8311/tifa-lockhart-final-fantasy-vii-remake.3840x2160.jpg reason=decode_failed
+2026-01-22 23:47:40,646 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://a-static.besthdwallpaper.com/tifa-lockhart-fantasy-art-final-fantasy-vii-remake-ffvii-wallpaper-3440x1440-68669_15.jpg reason=decode_failed
+2026-01-22 23:47:40,661 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://a-static.besthdwallpaper.com/tifa-lockhart-fantasy-art-final-fantasy-vii-remake-video-game-wallpaper-3840x2160-68631_54.jpg reason=decode_failed
+2026-01-22 23:47:40,733 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://a-static.besthdwallpaper.com/tifa-lockhart-final-fantasy-vii-remake-ff7-wallpaper-2560x1440-68601_51.jpg reason=decode_failed
+2026-01-22 23:47:42,113 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://pixelz.cc/wp-content/uploads/2019/12/final-fantasy-7-remake-cloud-strife-tifa-lockhart-uhd-4k-wallpaper.jpg reason=decode_failed
+2026-01-22 23:47:42,473 | INFO | tifa_archivist.orchestrator | discarded invalid image url=https://wallpapercrafter.com/desktop/70816-tifa-lockhart-final-fantasy-games-hd-artstation-4k.jpg reason=decode_failed
