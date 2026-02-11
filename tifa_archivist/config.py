@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from dataclasses import dataclass, field
 import os
@@ -61,6 +61,10 @@ class AppConfig:
     min_sat_stddev: float = 2.0
     min_sat_mean: float = 5.0
     min_colorfulness: float = 5.0
+    min_laplacian_var: float = 12.0
+    min_edge_density: float = 0.02
+    min_entropy: float = 4.0
+    edge_threshold: float = 20.0
     variance_max_side: int = 256
     flat_grid_size: int = 8
     flat_tile_stddev_max: float = 4.0
@@ -157,6 +161,10 @@ def load_config(path: Path | None) -> AppConfig:
         min_sat_stddev=float(data.get("min_sat_stddev", AppConfig.min_sat_stddev)),
         min_sat_mean=float(data.get("min_sat_mean", AppConfig.min_sat_mean)),
         min_colorfulness=float(data.get("min_colorfulness", AppConfig.min_colorfulness)),
+        min_laplacian_var=float(data.get("min_laplacian_var", AppConfig.min_laplacian_var)),
+        min_edge_density=float(data.get("min_edge_density", AppConfig.min_edge_density)),
+        min_entropy=float(data.get("min_entropy", AppConfig.min_entropy)),
+        edge_threshold=float(data.get("edge_threshold", AppConfig.edge_threshold)),
         variance_max_side=int(data.get("variance_max_side", AppConfig.variance_max_side)),
         flat_grid_size=int(data.get("flat_grid_size", AppConfig.flat_grid_size)),
         flat_tile_stddev_max=float(
