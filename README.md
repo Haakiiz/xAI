@@ -39,11 +39,23 @@ If you edit `config.yaml`, make sure it is ignored by git.
 
 ## Run
 
+Show CLI help:
+
+```bash
+python -m tifa_archivist --help
+```
+
 Basic run (PowerShell):
 
 ```bash
 python -m tifa_archivist run --limit 20 --out ./tifa_dataset
-python -m tifa_archivist stats --out ./tifa_dataset
+```
+
+Write manifest (default) / disable manifest:
+
+```bash
+python -m tifa_archivist run --limit 20 --out ./tifa_dataset --manifest
+python -m tifa_archivist run --limit 20 --out ./tifa_dataset --no-manifest
 ```
 
 Skip classification (downloads only, saves to `other/`):
@@ -52,14 +64,29 @@ Skip classification (downloads only, saves to `other/`):
 python -m tifa_archivist run --limit 20 --out ./tifa_dataset --skip-classify
 ```
 
-First-time setup example:
+Dataset stats:
 
 ```bash
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-setx XAI_API_KEY "YOUR_KEY"
-python -m tifa_archivist run --limit 20 --out ./tifa_dataset
+python -m tifa_archivist stats --out ./tifa_dataset
+```
+
+Quality audit (metrics only):
+
+```bash
+python -m tifa_archivist audit --out ./tifa_dataset --limit 200 --report QUALITYREPORT.MD --json quality_report.json
+```
+
+Quality audit with LLM review:
+
+```bash
+python -m tifa_archivist audit --out ./tifa_dataset --limit 200 --llm --llm-limit 20
+```
+
+Use a custom config file:
+
+```bash
+python -m tifa_archivist --config .\config.yaml run --limit 20
+python -m tifa_archivist --config .\config.yaml audit --limit 200
 ```
 
 ## Output

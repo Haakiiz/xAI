@@ -444,6 +444,9 @@ async def run_pipeline(config: AppConfig) -> None:
                         or config.min_sat_mean > 0
                         or config.min_colorfulness > 0
                         or config.flat_tile_ratio > 0
+                        or config.min_laplacian_var > 0
+                        or config.min_edge_density > 0
+                        or config.min_entropy > 0
                     ):
                         (
                             luma_stddev,
@@ -451,11 +454,15 @@ async def run_pipeline(config: AppConfig) -> None:
                             sat_mean,
                             colorfulness,
                             flat_ratio,
+                            laplacian_var,
+                            edge_density,
+                            entropy,
                         ) = image_quality_metrics(
                             data,
                             config.variance_max_side,
                             config.flat_grid_size,
                             config.flat_tile_stddev_max,
+                            config.edge_threshold,
                         )
                         low_luma = (
                             luma_stddev is not None
@@ -476,30 +483,49 @@ async def run_pipeline(config: AppConfig) -> None:
                             flat_ratio is not None
                             and flat_ratio >= config.flat_tile_ratio
                         )
-                        if (
-                            high_flat_ratio
-                            or (low_luma and low_sat_std)
+                        low_lap = (
+                            laplacian_var is not None
+                            and laplacian_var < config.min_laplacian_var
+                        )
+                        low_edge = (
+                            edge_density is not None
+                            and edge_density < config.min_edge_density
+                        )
+                        low_entropy = (
+                            entropy is not None and entropy < config.min_entropy
+                        )
+                        texture_fail = high_flat_ratio or low_entropy or (low_lap and low_edge)
+                        variance_fail = (
+                            (low_luma and low_sat_std)
                             or (low_sat_mean and low_sat_std)
                             or (low_color and low_sat_std)
-                        ):
+                        )
+                        if texture_fail or variance_fail:
+                            discard_reason = "low_variance"
+                            if reason == "truncated_ok":
+                                discard_reason = "truncated_low_quality"
                             db.insert_record(
                                 url,
                                 sha256,
                                 None,
                                 None,
                                 "discard",
-                                "low_variance",
+                                discard_reason,
                                 0.0,
                             )
                             await counters.inc("discarded")
                             logger.info(
-                                "discarded low variance url=%s luma_stddev=%.2f sat_stddev=%.2f sat_mean=%.2f colorfulness=%.2f flat_ratio=%.2f",
+                                "discarded low quality url=%s luma_stddev=%.2f sat_stddev=%.2f sat_mean=%.2f colorfulness=%.2f flat_ratio=%.2f lap_var=%.2f edge_density=%.4f entropy=%.2f reason=%s",
                                 url,
                                 luma_stddev or 0.0,
                                 sat_stddev or 0.0,
                                 sat_mean or 0.0,
                                 colorfulness or 0.0,
                                 flat_ratio or 0.0,
+                                laplacian_var or 0.0,
+                                edge_density or 0.0,
+                                entropy or 0.0,
+                                discard_reason,
                             )
                             continue
                     if sniffed_mime and (

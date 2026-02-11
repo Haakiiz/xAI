@@ -1,12 +1,14 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import re
 from io import BytesIO
 from datetime import datetime, timezone
 
 import math
+import numpy as np
 
 from PIL import Image, ImageFile, ImageStat
+
 
 def slugify(text: str, max_len: int = 32) -> str:
     text = text.lower()
@@ -121,7 +123,17 @@ def image_quality_metrics(
     max_side: int = 256,
     grid_size: int = 8,
     tile_stddev_max: float = 4.0,
-) -> tuple[float | None, float | None, float | None, float | None, float | None]:
+    edge_threshold: float = 20.0,
+) -> tuple[
+    float | None,
+    float | None,
+    float | None,
+    float | None,
+    float | None,
+    float | None,
+    float | None,
+    float | None,
+]:
     try:
         ImageFile.LOAD_TRUNCATED_IMAGES = True
         with Image.open(BytesIO(data)) as image:
@@ -138,6 +150,9 @@ def image_quality_metrics(
             sat_stddev = float(sat_stat.stddev[0]) if sat_stat.stddev else None
             sat_mean = float(sat_stat.mean[0]) if sat_stat.mean else None
             flat_ratio = None
+            laplacian_var = None
+            edge_density = None
+            entropy = None
             if grid_size > 0 and tile_stddev_max > 0:
                 width, height = luma.size
                 tiles_x = min(grid_size, max(1, width))
@@ -157,9 +172,40 @@ def image_quality_metrics(
                         total += 1
                 if total > 0:
                     flat_ratio = flat / total
+            luma_array = np.asarray(luma, dtype=np.float32)
+            if luma_array.size:
+                lap = (
+                    -4 * luma_array
+                    + np.roll(luma_array, 1, axis=0)
+                    + np.roll(luma_array, -1, axis=0)
+                    + np.roll(luma_array, 1, axis=1)
+                    + np.roll(luma_array, -1, axis=1)
+                )
+                laplacian_var = float(lap.var())
+                gy, gx = np.gradient(luma_array)
+                grad = np.hypot(gx, gy)
+                if edge_threshold > 0:
+                    edge_density = float((grad > edge_threshold).mean())
+                else:
+                    edge_density = float(grad.mean() / 255.0)
+                bins = np.bincount(luma_array.astype(np.uint8).ravel(), minlength=256)
+                total_bins = bins.sum()
+                if total_bins > 0:
+                    prob = bins / total_bins
+                    prob = prob[prob > 0]
+                    entropy = float(-(prob * np.log2(prob)).sum())
             pixels = list(rgb.getdata())
             if not pixels:
-                return luma_stddev, sat_stddev, sat_mean, None
+                return (
+                    luma_stddev,
+                    sat_stddev,
+                    sat_mean,
+                    None,
+                    flat_ratio,
+                    laplacian_var,
+                    edge_density,
+                    entropy,
+                )
             sum_rg = 0.0
             sum_rg2 = 0.0
             sum_yb = 0.0
@@ -182,8 +228,17 @@ def image_quality_metrics(
             colorfulness = math.sqrt(std_rg * std_rg + std_yb * std_yb) + 0.3 * math.sqrt(
                 mean_rg * mean_rg + mean_yb * mean_yb
             )
-            return luma_stddev, sat_stddev, sat_mean, colorfulness, flat_ratio
+            return (
+                luma_stddev,
+                sat_stddev,
+                sat_mean,
+                colorfulness,
+                flat_ratio,
+                laplacian_var,
+                edge_density,
+                entropy,
+            )
     except Exception:
-        return None, None, None, None, None
+        return None, None, None, None, None, None, None, None
     finally:
         ImageFile.LOAD_TRUNCATED_IMAGES = False
