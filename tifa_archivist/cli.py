@@ -9,7 +9,6 @@ from .config import DEFAULT_CONFIG_PATH, load_config
 from .db import ImageDB
 from .logging_config import setup_logging
 from .orchestrator import run_pipeline
-from .quality_audit import run_quality_audit
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -45,34 +44,6 @@ def build_parser() -> argparse.ArgumentParser:
     stats_parser = subparsers.add_parser("stats", help="Show dataset counts")
     stats_parser.add_argument("--out", type=Path, default=None, help="Output directory")
 
-    audit_parser = subparsers.add_parser(
-        "audit", help="Audit downloaded images for gray/low-quality outputs."
-    )
-    audit_parser.add_argument("--out", type=Path, default=None, help="Output directory")
-    audit_parser.add_argument(
-        "--limit", type=int, default=200, help="Max images to audit"
-    )
-    audit_parser.add_argument(
-        "--llm",
-        action="store_true",
-        help="Use Gemini to label a sample of flagged images",
-    )
-    audit_parser.add_argument(
-        "--llm-limit", type=int, default=20, help="Max images sent to LLM"
-    )
-    audit_parser.add_argument(
-        "--report",
-        type=Path,
-        default=Path("QUALITYREPORT.MD"),
-        help="Report output path",
-    )
-    audit_parser.add_argument(
-        "--json",
-        type=Path,
-        default=Path("quality_report.json"),
-        help="JSON output path",
-    )
-
     return parser
 
 
@@ -106,17 +77,3 @@ def main() -> None:
         print(f"Total records: {total}")
         for category, count in sorted(counts.items()):
             print(f"{category}: {count}")
-    elif args.command == "audit":
-        out_dir = args.out or config.out_dir
-        if args.out is not None:
-            config.out_dir = args.out
-            config.db_path = config.out_dir / "images.db"
-        run_quality_audit(
-            config=config,
-            out_dir=out_dir,
-            limit=args.limit,
-            report_path=args.report,
-            json_path=args.json,
-            llm=args.llm,
-            llm_limit=args.llm_limit,
-        )
