@@ -143,6 +143,9 @@ Plan:
 
 Notes/Discoveries:
 - (none yet)
+## 2026-02-11
+Update: GitHub push blocked by secret scanning (xAI API key in config.yaml).
+Redacted the key and preparing history rewrite plus force-push to master.
 ## 2026-02-07
 Update: Added Laplacian-variance, edge-density, and entropy metrics to runtime
 filters and quality audit. Integrated new thresholds in config and reporting to
