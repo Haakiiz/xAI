@@ -1,0 +1,69 @@
+2026-02-03 21:53:13,424 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+Final+Fantasy+VII+original+game+screenshot+official+art+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com 200
+2026-02-03 21:53:13,540 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+Final+Fantasy+VII+wallpaper+4k+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com 200
+2026-02-03 21:53:13,829 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+Final+Fantasy+VII+original+game+screenshot+official+art+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com&l=us-en&vqd=4-153716994728755044844266017686592883653&p=-1 200
+2026-02-03 21:53:13,859 | INFO | tifa_archivist.search | image search category=original_game query=Tifa Lockhart Final Fantasy VII original game screenshot official art -site:rare-gallery.com -site:wallpapersden.com -site:images.wallpapersden.com results=80 source=ddg
+2026-02-03 21:53:13,864 | INFO | tifa_archivist.orchestrator | search cap reached urls=50 max_urls=50
+2026-02-03 21:53:13,948 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9a02fc51-eb64-4034-aba7-d3bcee8913d0/dgerkfp-c9b3071b-3aa9-436f-b7fa-dc81caac2fbd.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzlhMDJmYzUxLWViNjQtNDAzNC1hYmE3LWQzYmNlZTg5MTNkMFwvZGdlcmtmcC1jOWIzMDcxYi0zYWE5LTQzNmYtYjdmYS1kYzgxY2FhYzJmYmQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.CAnZbdmfBnn2B1NzErxXlvHFD3mTq1X6e4AQFjM-UPA reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:13,952 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9a02fc51-eb64-4034-aba7-d3bcee8913d0/dgeslv8-64ee8d99-4c1c-41e7-97d3-518a82dfa12a.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzlhMDJmYzUxLWViNjQtNDAzNC1hYmE3LWQzYmNlZTg5MTNkMFwvZGdlc2x2OC02NGVlOGQ5OS00YzFjLTQxZTctOTdkMy01MThhODJkZmExMmEuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.55_7Rw6tT64BrqL0SaP1hBLVdNY8ukNkGx59yvYZrIs reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:13,954 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://preview.redd.it/6h2xbnzy8tt41.jpg?auto=webp&s=98a9365927ebc98077706783fa64afe31999ecc5 reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:14,036 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+Final+Fantasy+VII+wallpaper+4k+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com&l=us-en&vqd=4-44862176008667611169459253676785625015&p=-1 200
+2026-02-03 21:53:14,067 | INFO | tifa_archivist.search | image search category=wallpaper query=Tifa Lockhart Final Fantasy VII wallpaper 4k -site:rare-gallery.com -site:wallpapersden.com -site:images.wallpapersden.com results=80 source=ddg
+2026-02-03 21:53:14,157 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://cdna.artstation.com/p/assets/images/images/077/523/902/large/genzo1993-016-jpeg.jpg?1719668524 reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:14,532 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.2926864.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:14,554 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.4218321.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:15,413 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://a-static.besthdwallpaper.com/tifa-lockhart-fantasy-art-final-fantasy-vii-remake-video-game-wallpaper-2560x1440-68631_51.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:16,063 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://www.fightersgeneration.com/nf9/char/tifa-lockhart-ff7-artwork-by-tetsuya-nomura.png reason=decode_failed_allowed mime=image/png
+2026-02-03 21:53:19,483 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.2917895.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:19,607 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.4089228.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:22,835 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.4010916.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:23,395 | WARNING | tifa_archivist.orchestrator | classification failed url=https://static.zerochan.net/Tifa.Lockhart.full.2926864.jpg error=Gemini API error 400: {
+  "error": {
+    "code": 400,
+    "message": "Unable to process input image. Please retry or report in https://developers.generativeai.google/guide/troubleshooting",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+2026-02-03 21:53:23,846 | WARNING | tifa_archivist.download | download failed url=https://wallpaperaccess.com/full/1898363.jpg error=image too small
+2026-02-03 21:53:23,868 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://wallpaperaccess.com/full/1898363.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:24,836 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.4601696.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:25,991 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.4296815.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:27,143 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://oyster.ignimgs.com/mediawiki/apis.ign.com/final-fantasy-7-rebirth/a/a8/Tifa_Lockhart_Final_Fantasy_VII_Rebirth.png reason=decode_failed_allowed mime=image/png
+2026-02-03 21:53:27,959 | WARNING | tifa_archivist.orchestrator | classification failed url=https://www.fightersgeneration.com/nf9/char/tifa-lockhart-ff7-artwork-by-tetsuya-nomura.png error=Gemini API error 400: {
+  "error": {
+    "code": 400,
+    "message": "Unable to process input image. Please retry or report in https://developers.generativeai.google/guide/troubleshooting",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+2026-02-03 21:53:28,632 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.2706132.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:29,823 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://wallpapercrafter.com/desktop1/641157-Final-Fantasy-Final-Fantasy-VII-Tifa-Lockhart-tifa.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:31,523 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://cdn.staticneo.com/ew/6/6e/FFVII_Rebirth_Tifa.png reason=decode_failed_allowed mime=image/png
+2026-02-03 21:53:33,126 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://s1.zerochan.net/Tifa.Lockhart.600.4093360.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:36,092 | WARNING | tifa_archivist.download | download failed url=https://images6.alphacoders.com/436/436981.jpg error=image too small
+2026-02-03 21:53:36,233 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://www.creativeuncut.com/gallery-45/art/ff7ec-tifa-lockhart-portrait.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:37,466 | WARNING | tifa_archivist.orchestrator | classification failed url=https://oyster.ignimgs.com/mediawiki/apis.ign.com/final-fantasy-7-rebirth/a/a8/Tifa_Lockhart_Final_Fantasy_VII_Rebirth.png error=Gemini API error 400: {
+  "error": {
+    "code": 400,
+    "message": "Unable to process input image. Please retry or report in https://developers.generativeai.google/guide/troubleshooting",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+2026-02-03 21:53:38,668 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.4089227.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:39,491 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://artfiles.alphacoders.com/133/133045.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:40,472 | WARNING | tifa_archivist.download | download failed url=https://static.zerochan.net/Tifa.Lockhart.full.4245248.jpg error=status 429
+2026-02-03 21:53:40,534 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://i.pinimg.com/originals/69/c6/7e/69c67ec907ef10a6fb4dca84b07f31d2.png reason=decode_failed_allowed mime=image/png
+2026-02-03 21:53:42,328 | WARNING | tifa_archivist.orchestrator | classification failed url=https://cdn.staticneo.com/ew/6/6e/FFVII_Rebirth_Tifa.png error=Gemini API error 400: {
+  "error": {
+    "code": 400,
+    "message": "Unable to process input image. Please retry or report in https://developers.generativeai.google/guide/troubleshooting",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+2026-02-03 21:53:47,334 | INFO | tifa_archivist.orchestrator | image decode skipped url=https://static.zerochan.net/Tifa.Lockhart.full.3915822.jpg reason=decode_failed_allowed mime=image/jpeg
+2026-02-03 21:53:52,008 | WARNING | tifa_archivist.orchestrator | classification failed url=https://i.pinimg.com/originals/69/c6/7e/69c67ec907ef10a6fb4dca84b07f31d2.png error=Gemini API error 400: {
+  "error": {
+    "code": 400,
+    "message": "Unable to process input image. Please retry or report in https://developers.generativeai.google/guide/troubleshooting",
+    "status": "INVALID_ARGUMENT"
+  }
+}

@@ -1,0 +1,20 @@
+2026-01-22 23:41:51,900 | WARNING | tifa_archivist.classify | vision check skipped: {"code":"Client specified an invalid argument","error":"Invalid request content: Failed to decode image buffer."}
+2026-01-22 23:41:53,039 | INFO | primp | response: https://duckduckgo.com/?q=Tifa+Lockhart+Final+Fantasy+VII+wallpaper+4k+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com 200
+2026-01-22 23:41:53,397 | INFO | primp | response: https://duckduckgo.com/i.js?o=json&q=Tifa+Lockhart+Final+Fantasy+VII+wallpaper+4k+-site%3Arare-gallery.com+-site%3Awallpapersden.com+-site%3Aimages.wallpapersden.com&l=us-en&vqd=4-44118503713731734981771842273567156631&p=-1 200
+2026-01-22 23:41:53,429 | INFO | tifa_archivist.search | image search category=wallpaper query=Tifa Lockhart Final Fantasy VII wallpaper 4k -site:rare-gallery.com -site:wallpapersden.com -site:images.wallpapersden.com results=80 source=ddg
+2026-01-22 23:41:53,431 | INFO | tifa_archivist.orchestrator | search cap reached urls=15 max_urls=15
+2026-01-22 23:41:57,016 | WARNING | tifa_archivist.download | download failed url=https://wallpapercave.com/wp/wp5965634.jpg error=content-length mismatch
+2026-01-22 23:41:57,046 | WARNING | tifa_archivist.download | download failed url=https://images.hdqwalls.com/wallpapers/tifa-lockhart-final-fantasy-7-remake-4k-cu.jpg error=content-length mismatch
+2026-01-22 23:41:57,439 | WARNING | tifa_archivist.download | download failed url=https://wallpapers.com/images/hd/tifa-lockhart-4k-wallpaper-68qushxi0ujmisu0.jpg error=content-length mismatch
+2026-01-22 23:41:57,792 | WARNING | tifa_archivist.download | download failed url=https://4.bp.blogspot.com/-G_J0akO_F30/XQ8e1Cf554I/AAAAAAAAHtY/fXSLWRvdXfkusN1p8VIzo87BMJVOt6YFQCKgBGAs/w0/tifa-lockhart-final-fantasy-7-remake-uhdpaper.com-4K-37.jpg error=content-length mismatch
+2026-01-22 23:41:57,988 | WARNING | tifa_archivist.download | download failed url=https://wallpapercave.com/wp/wp5462927.jpg error=content-length mismatch
+2026-01-22 23:41:58,189 | WARNING | tifa_archivist.download | download failed url=https://images6.alphacoders.com/436/436981.jpg error=content-length mismatch
+2026-01-22 23:41:59,359 | WARNING | tifa_archivist.download | download failed url=https://a-static.besthdwallpaper.com/tifa-lockhart-fantasy-art-final-fantasy-vii-remake-ffvii-wallpaper-3440x1440-68669_15.jpg error=content-length mismatch
+2026-01-22 23:41:59,380 | WARNING | tifa_archivist.download | download failed url=https://a-static.besthdwallpaper.com/tifa-lockhart-fantasy-art-final-fantasy-vii-remake-video-game-wallpaper-3840x2160-68631_54.jpg error=content-length mismatch
+2026-01-22 23:42:00,935 | WARNING | tifa_archivist.download | download failed url=https://cdn.wallpapersafari.com/70/80/mMv1OQ.jpg error=content-length mismatch
+2026-01-22 23:42:01,022 | WARNING | tifa_archivist.download | download failed url=https://wallpapers.com/images/hd/tifa-lockhart-4k-wallpaper-a83flpornh11vqz8.jpg error=content-length mismatch
+2026-01-22 23:42:01,420 | WARNING | tifa_archivist.download | download failed url=https://images.hdqwalls.com/wallpapers/tifa-lockhart-in-final-fantasy-vii-po.jpg error=content-length mismatch
+2026-01-22 23:42:01,613 | WARNING | tifa_archivist.download | download failed url=https://wallpapercrafter.com/desktop/70816-tifa-lockhart-final-fantasy-games-hd-artstation-4k.jpg error=content-length mismatch
+2026-01-22 23:42:02,132 | WARNING | tifa_archivist.download | download failed url=https://motionbgs.com/media/8311/tifa-lockhart-final-fantasy-vii-remake.3840x2160.jpg error=content-length mismatch
+2026-01-22 23:42:03,085 | WARNING | tifa_archivist.download | download failed url=https://pixelz.cc/wp-content/uploads/2019/12/final-fantasy-7-remake-cloud-strife-tifa-lockhart-uhd-4k-wallpaper.jpg error=content-length mismatch
+2026-01-22 23:42:03,342 | WARNING | tifa_archivist.download | download failed url=https://a-static.besthdwallpaper.com/tifa-lockhart-final-fantasy-vii-remake-ff7-wallpaper-2560x1440-68601_51.jpg error=content-length mismatch
