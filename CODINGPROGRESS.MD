@@ -159,3 +159,8 @@ Update: Quality audit output now includes laplacian variance, edge density, and
 entropy per sample to align with the runtime gate.
 Update: Refreshed README CLI usage examples to include run/stats/audit,
 manifest toggles, and top-level --config usage.
+
+## 2026-02-14
+Update: Added `analyze_bank_statement.py`, a standalone CSV-to-Grok analysis script for
+annual bank statements. It loads `XAI_API_KEY` from `.env`, summarizes recurring
+transactions, and asks Grok for subscriptions and likely unwanted ongoing costs.
