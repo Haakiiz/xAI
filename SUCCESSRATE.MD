@@ -1,6 +1,6 @@
-﻿# SUCCESSRATE.MD
+# SUCCESSRATE.MD
 
-Last updated: 2026-02-04
+Last updated: 2026-02-14
 
 ## Baseline metrics (cumulative, from tifa_dataset\\images.db)
 - Total records: 51
@@ -31,3 +31,7 @@ Last updated: 2026-02-04
 - search_failed: 0
 - download_reasons:
   - image too small=11
+
+
+## Maintenance updates
+- 2026-02-14: Added `analyze_bank_statement.py` helper for Grok-based subscription/cost analysis from bank CSV exports.
