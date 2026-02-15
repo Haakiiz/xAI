@@ -73,3 +73,14 @@ Also created:
 ```bash
 pytest -q
 ```
+
+## Ekstra: analyser bankutskrift med Grok
+
+Det finnes også et enkelt script for å analysere bankutskrift (CSV) og få en
+oversikt over sannsynlige abonnementer og andre løpende kostnader:
+
+```bash
+python analyze_bank_statement.py ./bankutskrift.csv --env-file ./.env
+```
+
+Scriptet forventer `XAI_API_KEY` i miljøet eller `.env`.
