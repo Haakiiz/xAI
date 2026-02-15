@@ -164,3 +164,22 @@ manifest toggles, and top-level --config usage.
 Update: Added `analyze_bank_statement.py`, a standalone CSV-to-Grok analysis script for
 annual bank statements. It loads `XAI_API_KEY` from `.env`, summarizes recurring
 transactions, and asks Grok for subscriptions and likely unwanted ongoing costs.
+
+## 2026-02-15
+Update: Updated `analyze_bank_statement.py` CSV header mapping for Norwegian bank exports.
+It now prioritizes `bokføring`/`bokføringsdato` for date, `Beløp` for amount, and
+description fallback columns including `Mottaker`, `Navn`, `Tittel`, `Avsender`,
+and `Betalingstype`.
+Update: Fixed CSV parsing for semicolon-delimited bank exports by adding dialect
+sniffing/fallback (`;`) and robust header normalization in
+`analyze_bank_statement.py`. Also changed description mapping to pick the first
+non-empty value across preferred description columns per row.
+Update: Investigated xAI `403` with `error code: 1010` and confirmed it is
+edge-side blocking behavior (Cloudflare-style). Added explicit `User-Agent`
+and `Accept` headers in `analyze_bank_statement.py` request path; verified with
+live API call that requests now succeed using `grok-4-1-fast-reasoning`.
+Update: Refined merchant extraction and prompt semantics in
+`analyze_bank_statement.py` after observing misclassification from account-like
+fields. Description fallback now prioritizes `Tittel` (payee/merchant) and no
+longer uses `Avsender`/`Mottaker`; prompt now explicitly states that
+description should be interpreted as who was paid.

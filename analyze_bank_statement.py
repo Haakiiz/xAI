@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import os
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
@@ -12,7 +13,12 @@ from typing import Iterable
 from urllib import error, request
 
 DEFAULT_BASE_URL = "https://api.x.ai/v1"
-DEFAULT_MODEL = "grok-4-1"
+DEFAULT_MODEL = "grok-4-1-fast-reasoning"
+DEFAULT_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/133.0.0.0 Safari/537.36"
+)
 
 
 @dataclass
@@ -38,13 +44,32 @@ def load_env(path: Path) -> None:
 
 
 def _pick_column(headers: list[str], candidates: list[str]) -> str:
-    normalized = {h.strip().lower(): h for h in headers}
+    normalized = {_normalize_header(h): h for h in headers}
     for candidate in candidates:
-        if candidate in normalized:
-            return normalized[candidate]
+        key = _normalize_header(candidate)
+        if key in normalized:
+            return normalized[key]
     raise ValueError(
         "Fant ikke forventet kolonne. Tilgjengelige kolonner: " + ", ".join(headers)
     )
+
+
+def _normalize_header(value: str) -> str:
+    cleaned = value.strip().lower().replace("\ufeff", "")
+    replacements = {
+        "Ã¸": "o",
+        "ã¸": "o",
+        "Ã¥": "a",
+        "ã¥": "a",
+        "Ã¦": "ae",
+        "ã¦": "ae",
+        "ø": "o",
+        "å": "a",
+        "æ": "ae",
+    }
+    for src, dst in replacements.items():
+        cleaned = cleaned.replace(src, dst)
+    return re.sub(r"[^a-z0-9]+", "", cleaned)
 
 
 def _parse_amount(value: str) -> float:
@@ -58,25 +83,56 @@ def _parse_amount(value: str) -> float:
 
 def read_transactions(csv_path: Path) -> list[Transaction]:
     with csv_path.open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle)
+        sample = handle.read(4096)
+        handle.seek(0)
+        try:
+            dialect = csv.Sniffer().sniff(sample, delimiters=";,|\t")
+            reader = csv.DictReader(handle, dialect=dialect)
+        except csv.Error:
+            reader = csv.DictReader(handle, delimiter=";")
+
         if not reader.fieldnames:
             raise ValueError("CSV-filen mangler header-rad.")
 
         headers = list(reader.fieldnames)
-        date_col = _pick_column(headers, ["dato", "date", "bokføringsdato", "booking date"])
-        description_col = _pick_column(
-            headers,
-            ["tekst", "description", "beskrivelse", "mottaker", "detaljer"],
+        date_col = _pick_column(
+            headers, ["bokforing", "bokforingsdato", "dato", "date", "booking date"]
         )
-        amount_col = _pick_column(headers, ["beløp", "amount", "sum", "debit", "credit"])
+        description_candidates = [
+            "tittel",
+            "navn",
+            "tekst",
+            "description",
+            "beskrivelse",
+            "detaljer",
+            "betalingstype",
+        ]
+        normalized_description_candidates = {
+            _normalize_header(candidate) for candidate in description_candidates
+        }
+        description_cols = [
+            header
+            for header in headers
+            if _normalize_header(header) in normalized_description_candidates
+        ]
+        if not description_cols:
+            raise ValueError(
+                "Fant ikke beskrivelseskolonne. Tilgjengelige kolonner: "
+                + ", ".join(headers)
+            )
+        amount_col = _pick_column(headers, ["belop", "amount", "sum", "debit", "credit"])
 
         rows: list[Transaction] = []
         for row in reader:
             amount = _parse_amount(row[amount_col])
+            description = next(
+                (str(row.get(col, "")).strip() for col in description_cols if str(row.get(col, "")).strip()),
+                "",
+            )
             rows.append(
                 Transaction(
                     date=row[date_col].strip(),
-                    description=row[description_col].strip(),
+                    description=description,
                     amount=amount,
                 )
             )
@@ -114,19 +170,27 @@ def summarize_transactions(transactions: Iterable[Transaction]) -> list[dict[str
     return summary
 
 
-def ask_grok(summary: list[dict[str, object]], api_key: str, model: str, base_url: str) -> str:
+def ask_grok(
+    summary: list[dict[str, object]],
+    api_key: str,
+    model: str,
+    base_url: str,
+    user_agent: str,
+) -> str:
     system_prompt = (
-        "Du er en norsk økonomiassistent. Finn sannsynlige abonnementer og løpende kostnader "
-        "som kan være unødvendige. Prioriter tydelighet og konkrete handlinger."
+        "Du er en norsk okonomiassistent. Finn sannsynlige abonnementer og lopende kostnader "
+        "som kan vaere unodvendige. Prioriter tydelighet og konkrete handlinger."
     )
     user_prompt = (
         "Her er en oppsummering av transaksjoner gruppert per beskrivelse. "
+        "Beskrivelse representerer fortrinnsvis feltet 'Tittel' i CSV (hvem jeg har betalt til / merchant). "
+        "Ikke tolk dette som avsenderkonto. "
         "Lag en rapport med disse seksjonene:\n"
-        "1) Sannsynlige abonnementer (med månedlig estimat)\n"
-        "2) Andre løpende kostnader å vurdere\n"
-        "3) Mulige 'uønskede' kostnader\n"
+        "1) Sannsynlige abonnementer (med manedlig estimat)\n"
+        "2) Andre lopende kostnader a vurdere\n"
+        "3) Mulige 'uonskede' kostnader\n"
         "4) Konkrete neste steg\n\n"
-        "Bruk norsk språk. Dersom du er usikker, merk det tydelig.\n\n"
+        "Bruk norsk sprak. Dersom du er usikker, merk det tydelig.\n\n"
         f"Data:\n{json.dumps(summary, ensure_ascii=False, indent=2)}"
     )
 
@@ -145,6 +209,8 @@ def ask_grok(summary: list[dict[str, object]], api_key: str, model: str, base_ur
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": user_agent,
         },
         data=json.dumps(payload).encode("utf-8"),
     )
@@ -171,12 +237,17 @@ def ask_grok(summary: list[dict[str, object]], api_key: str, model: str, base_ur
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Analyser bankutskrift i CSV med Grok for å finne abonnement og uønskede kostnader."
+        description="Analyser bankutskrift i CSV med Grok for a finne abonnement og uonskede kostnader."
     )
     parser.add_argument("csv_file", type=Path, help="Sti til bankutskrift i CSV-format")
     parser.add_argument("--env-file", type=Path, default=Path(".env"), help="Sti til .env")
     parser.add_argument("--base-url", default=os.getenv("XAI_BASE_URL", DEFAULT_BASE_URL))
     parser.add_argument("--model", default=os.getenv("XAI_MODEL", DEFAULT_MODEL))
+    parser.add_argument(
+        "--user-agent",
+        default=os.getenv("XAI_USER_AGENT", DEFAULT_USER_AGENT),
+        help="User-Agent brukt mot xAI API",
+    )
     parser.add_argument(
         "--json-out",
         type=Path,
@@ -188,7 +259,7 @@ def main() -> None:
     load_env(args.env_file)
     api_key = os.getenv("XAI_API_KEY")
     if not api_key:
-        raise SystemExit("XAI_API_KEY mangler. Legg den i .env eller miljøvariabler.")
+        raise SystemExit("XAI_API_KEY mangler. Legg den i .env eller miljo variabler.")
 
     transactions = read_transactions(args.csv_file)
     if not transactions:
@@ -202,14 +273,21 @@ def main() -> None:
             encoding="utf-8",
         )
 
-    report = ask_grok(summary=summary, api_key=api_key, model=args.model, base_url=args.base_url)
+    report = ask_grok(
+        summary=summary,
+        api_key=api_key,
+        model=args.model,
+        base_url=args.base_url,
+        user_agent=args.user_agent,
+    )
 
     print("=" * 80)
     print("Grok-analyse av bankutskrift")
-    print(f"Kjørt: {datetime.now().isoformat(timespec='seconds')}")
+    print(f"Kjort: {datetime.now().isoformat(timespec='seconds')}")
     print("=" * 80)
     print(report)
 
 
 if __name__ == "__main__":
     main()
+
