@@ -8,6 +8,7 @@ Features:
 - Async downloads and LLM classification with concurrency limits
 - Dedup by URL and sha256 (no image decoding step)
 - SQLite tracking for idempotent runs
+- Adaptive source intelligence: learns which query+host pairs produce good kept images
 - Progress bar with URLs found, downloaded, classified, kept, discarded
 - NSFW allowed, but anything under 18 or ambiguous is discarded
 
@@ -65,6 +66,7 @@ Also created:
 - To change models, update `xai.model_primary` and `xai.model_fallback` in `config.yaml`.
 - If you hit DDG rate limits, lower `search_concurrency` or reduce query count.
 - To control cost, tune `max_urls_multiplier` (global URL cap = limit * multiplier).
+- Adaptive ranking state is stored in `source_intelligence.json` under `out_dir` by default.
 - Only `.jpg/.jpeg/.png` URLs are queued; non-matching content-types are skipped.
 - Small or truncated files are rejected via `min_bytes` and Content-Length checks.
 

@@ -3,13 +3,25 @@ from __future__ import annotations
 import hashlib
 from io import BytesIO
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from tifa_archivist.dedupe import PhashIndex, compute_phash, compute_sha256, phash_distance
 
 
 def make_image_bytes(color: tuple[int, int, int]) -> bytes:
     image = Image.new("RGB", (64, 64), color)
+    buf = BytesIO()
+    image.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def make_checker_image_bytes() -> bytes:
+    image = Image.new("RGB", (64, 64), (32, 32, 32))
+    draw = ImageDraw.Draw(image)
+    for x in range(0, 64, 8):
+        for y in range(0, 64, 8):
+            if ((x + y) // 8) % 2 == 0:
+                draw.rectangle((x, y, x + 7, y + 7), fill=(240, 240, 240))
     buf = BytesIO()
     image.save(buf, format="PNG")
     return buf.getvalue()
@@ -31,7 +43,7 @@ def test_phash_distance_identical() -> None:
 
 def test_phash_distance_different() -> None:
     data1 = make_image_bytes((255, 0, 0))
-    data2 = make_image_bytes((0, 0, 255))
+    data2 = make_checker_image_bytes()
     h1 = compute_phash(data1)
     h2 = compute_phash(data2)
     assert h1 is not None

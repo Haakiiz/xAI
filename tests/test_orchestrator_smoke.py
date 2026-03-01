@@ -8,11 +8,12 @@ from tifa_archivist.orchestrator import run_pipeline
 
 
 def test_run_pipeline_smoke(tmp_path, monkeypatch) -> None:
-    image_buf = BytesIO()
-    Image.new("RGB", (640, 480), color=(20, 30, 40)).save(image_buf, format="JPEG")
-    image_bytes = image_buf.getvalue()
-
-    async def fake_search_live_images(**_kwargs):
+    def fake_search_ddg_images(
+        query,
+        max_results,
+        stop_flag,
+        max_retries,
+    ):
         return [
             "https://example.com/a.jpg",
             "https://example.com/b.png",
@@ -28,11 +29,16 @@ def test_run_pipeline_smoke(tmp_path, monkeypatch) -> None:
         max_retries,
         min_bytes,
     ):
-        return image_bytes, "image/jpeg"
+        seed = ord(url[-5]) % 50
+        image_buf = BytesIO()
+        Image.new("RGB", (640, 480), color=(20 + seed, 30 + seed, 40 + seed)).save(
+            image_buf, format="JPEG"
+        )
+        return image_buf.getvalue(), "image/jpeg"
 
     monkeypatch.setattr(
-        "tifa_archivist.orchestrator.search_live_images",
-        fake_search_live_images,
+        "tifa_archivist.orchestrator.search_ddg_images",
+        fake_search_ddg_images,
     )
     monkeypatch.setattr(
         "tifa_archivist.orchestrator.fetch_image",
@@ -49,9 +55,11 @@ def test_run_pipeline_smoke(tmp_path, monkeypatch) -> None:
         skip_classify=True,
         min_bytes=1,
         max_bytes=10_000,
-        max_download_retries=0,
-        max_search_retries=0,
-        min_side=256,
+        max_download_retries=1,
+        max_search_retries=1,
+        search_queries=["Tifa Lockhart FF7"],
+        adaptive_search_enabled=False,
+        source_intelligence_path=out_dir / "source_intelligence.json",
         xai=XAIConfig(api_key="test"),
     )
 

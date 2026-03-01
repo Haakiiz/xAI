@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import base64
-import imghdr
 import json
 import logging
 import random
@@ -39,14 +38,14 @@ class ImageDecodeError(RuntimeError):
 
 
 def _guess_mime(data: bytes) -> str:
-    kind = imghdr.what(None, data)
-    if kind == "jpeg":
+    header = data[:16]
+    if header.startswith(b"\xff\xd8\xff"):
         return "image/jpeg"
-    if kind == "png":
+    if header.startswith(b"\x89PNG\r\n\x1a\n"):
         return "image/png"
-    if kind == "gif":
+    if header.startswith((b"GIF87a", b"GIF89a")):
         return "image/gif"
-    if kind == "webp":
+    if header.startswith(b"RIFF") and data[8:12] == b"WEBP":
         return "image/webp"
     return "image/jpeg"
 

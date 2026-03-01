@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-01-18T13:28:34+00:00",
-  "count": 363,
+  "generated_at": "2026-02-25T21:31:43+00:00",
+  "count": 365,
   "items": [
     {
       "url": "https://cdn.donmai.us/original/02/b0/02b02b5cc57802741a2df77f0f580954.jpg",
@@ -3631,6 +3631,26 @@
       "created_at": "2026-01-18T13:17:30+00:00",
       "model_name": "unclassified",
       "confidence": 1.0
+    },
+    {
+      "url": "https://cdn.renderhub.com/titanms/gallery/tifa-lockhart-final-fantasy-9.jpg",
+      "sha256": "e9f2983ba8bbf28706be119ca936754524aaec40accc04963b91dfa4bb9d404e",
+      "phash": null,
+      "filepath": null,
+      "category": "discard",
+      "created_at": "2026-02-25T21:31:25+00:00",
+      "model_name": "dedupe",
+      "confidence": 1.0
+    },
+    {
+      "url": "https://www.renderhub.com/titanms/gallery/tifa-lockhart-20.jpg",
+      "sha256": "ff2267f199d1a76d27aa6b6024f57e286edfd68a1300136d035056b001df5b21",
+      "phash": null,
+      "filepath": "tifa_dataset\\render_3d\\ff2267f199d1_tifa-lockhart-20.jpg",
+      "category": "render_3d",
+      "created_at": "2026-02-25T21:31:30+00:00",
+      "model_name": "grok-4-1-fast-non-reasoning",
+      "confidence": 0.95
     }
   ]
 }

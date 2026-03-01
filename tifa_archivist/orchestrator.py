@@ -17,6 +17,7 @@ from .db import ImageDB
 from .dedupe import compute_sha256
 from .download import fetch_image
 from .search import generate_queries, search_ddg_images
+from .source_intelligence import SourceIntelligence, normalize_host
 from .utils import slugify, utc_now_iso
 
 
@@ -153,6 +154,17 @@ async def run_pipeline(config: AppConfig) -> None:
 
     db = ImageDB(config.db_path)
     db.init()
+    source_intelligence = SourceIntelligence(
+        state_path=config.source_intelligence_path,
+        enabled=config.adaptive_search_enabled,
+        exploration_weight=config.adaptive_search_exploration_weight,
+        max_variants=config.adaptive_search_max_variants,
+        max_site_variants=config.adaptive_search_max_site_variants,
+        min_host_samples=config.adaptive_search_min_host_samples,
+        bad_host_threshold=config.adaptive_search_bad_host_threshold,
+        bad_host_reject_probability=config.adaptive_search_bad_host_reject_probability,
+    )
+    source_intelligence.load()
 
     counters = Counters()
     queue: asyncio.Queue[str | None] = asyncio.Queue(maxsize=config.queue_size)
@@ -162,6 +174,19 @@ async def run_pipeline(config: AppConfig) -> None:
     stop_lock = asyncio.Lock()
     search_stop_event = asyncio.Event()
     max_urls = max(1, config.limit * config.max_urls_multiplier)
+    url_sources: dict[str, tuple[str, str]] = {}
+    url_sources_lock = asyncio.Lock()
+
+    async def set_url_source(url: str, query: str, host: str) -> None:
+        async with url_sources_lock:
+            url_sources[url] = (query, host)
+
+    async def get_url_source(url: str) -> tuple[str | None, str | None]:
+        async with url_sources_lock:
+            value = url_sources.get(url)
+        if value is None:
+            return None, None
+        return value[0], value[1]
 
     async def request_stop() -> None:
         async with stop_lock:
@@ -245,6 +270,7 @@ async def run_pipeline(config: AppConfig) -> None:
                     stop_flag,
                     config.max_search_retries,
                 )
+            source_intelligence.record_search(query, len(urls))
             for url in urls:
                 if stop_event.is_set() or search_stop_event.is_set():
                     break
@@ -254,7 +280,12 @@ async def run_pipeline(config: AppConfig) -> None:
                     continue
                 if db.has_url(url):
                     continue
+                host = normalize_host(url)
+                if not source_intelligence.should_accept_host(query, host):
+                    continue
                 if await safe_put(url):
+                    source_intelligence.record_enqueued(query, host)
+                    await set_url_source(url, query, host)
                     count = await counters.inc("urls_found")
                     if count >= max_urls:
                         await mark_search_cap()
@@ -273,12 +304,18 @@ async def run_pipeline(config: AppConfig) -> None:
                     break
                 url = item
                 try:
+                    source_query, source_host = await get_url_source(url)
+                    if source_host is None:
+                        source_host = normalize_host(url)
                     if db.has_url(url):
+                        source_intelligence.record_discard(
+                            source_query, source_host, "seen_url"
+                        )
                         continue
                     if stop_event.is_set():
                         continue
 
-                    data, content_type = await fetch_image(
+                    fetched = await fetch_image(
                         url,
                         session,
                         download_sema,
@@ -286,14 +323,28 @@ async def run_pipeline(config: AppConfig) -> None:
                         config.max_bytes,
                         config.max_download_retries,
                         config.min_bytes,
+                        min_resolution=(config.min_width, config.min_height),
                     )
+                    fetch_error = None
+                    if isinstance(fetched, tuple) and len(fetched) == 3:
+                        data, content_type, fetch_error = fetched
+                    else:
+                        data, content_type = fetched
                     if not data:
+                        source_intelligence.record_download_failed(
+                            source_query,
+                            source_host,
+                            fetch_error or "download_failed",
+                        )
                         continue
                     await counters.inc("downloaded")
 
                     sha256 = compute_sha256(data)
                     if db.has_sha256(sha256):
                         db.insert_record(url, sha256, None, None, "discard", "dedupe", 1.0)
+                        source_intelligence.record_discard(
+                            source_query, source_host, "dedupe"
+                        )
                         await counters.inc("discarded")
                         continue
 
@@ -321,6 +372,9 @@ async def run_pipeline(config: AppConfig) -> None:
                             db.insert_record(
                                 url, sha256, phash, None, "discard", "classify_error", 0.0
                             )
+                            source_intelligence.record_classify_failed(
+                                source_query, source_host, "classify_error"
+                            )
                             await counters.inc("discarded")
                             continue
 
@@ -335,6 +389,11 @@ async def run_pipeline(config: AppConfig) -> None:
                                 "discard",
                                 classifier.model_name,
                                 result.confidence,
+                            )
+                            source_intelligence.record_discard(
+                                source_query,
+                                source_host,
+                                result.label,
                             )
                             await counters.inc("discarded")
                             continue
@@ -369,17 +428,33 @@ async def run_pipeline(config: AppConfig) -> None:
                         result_model,
                         result_confidence,
                     )
+                    source_intelligence.record_kept(
+                        source_query, source_host, result_label
+                    )
 
                     if await counters.get("kept") >= config.limit:
                         await request_stop()
                 except Exception:
+                    source_query, source_host = await get_url_source(url)
+                    source_intelligence.record_download_failed(
+                        source_query,
+                        source_host or normalize_host(url),
+                        "worker_exception",
+                    )
                     logger.exception("worker %s failed url=%s", worker_id, url)
                 finally:
                     queue.task_done()
 
         progress_task = asyncio.create_task(progress_loop(counters, done_event, config.limit))
 
-        queries = generate_queries(config.search_queries)
+        base_queries = generate_queries(config.search_queries)
+        queries = source_intelligence.plan_queries(base_queries)
+        logger.info(
+            "search plan base_queries=%s scheduled_queries=%s adaptive=%s",
+            len(base_queries),
+            len(queries),
+            config.adaptive_search_enabled,
+        )
         search_tasks = [asyncio.create_task(search_task(q)) for q in queries]
         download_tasks = [
             asyncio.create_task(download_worker(i))
@@ -395,6 +470,16 @@ async def run_pipeline(config: AppConfig) -> None:
         await asyncio.gather(*download_tasks, return_exceptions=True)
         done_event.set()
         await progress_task
+        source_intelligence.save()
+        top_hosts = source_intelligence.top_summary(limit=3)
+        if top_hosts:
+            logger.info(
+                "adaptive top hosts: %s",
+                ", ".join(
+                    f"{host} score={score:.3f} n={attempts}"
+                    for host, score, attempts in top_hosts
+                ),
+            )
 
     if config.manifest:
         records = db.all_records()

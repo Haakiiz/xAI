@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import asyncio
+import io
 import logging
 import random
+
+from PIL import Image
 
 
 class FetchError(Exception):
@@ -26,10 +29,12 @@ async def fetch_image(
     max_bytes: int,
     max_retries: int,
     min_bytes: int,
-) -> tuple[bytes | None, str | None]:
+    min_resolution: tuple[int, int] = (512, 512),
+) -> tuple[bytes | None, str | None, str | None]:
     logger = logging.getLogger(__name__)
 
     for attempt in range(max_retries):
+        last_error = "download_failed"
         try:
             async with sema:
                 async with session.get(url, timeout=timeout) as resp:
@@ -61,11 +66,25 @@ async def fetch_image(
                         raise FetchError("image too small")
                     if data.lstrip().startswith(b"<"):
                         raise FetchError("html response")
-                    return data, content_type
+                    if min_resolution[0] > 0 or min_resolution[1] > 0:
+                        try:
+                            with Image.open(io.BytesIO(data)) as img:
+                                w, h = img.size
+                            if w < min_resolution[0] or h < min_resolution[1]:
+                                raise FetchError(
+                                    f"resolution too low ({w}x{h}, "
+                                    f"need {min_resolution[0]}x{min_resolution[1]})"
+                                )
+                        except FetchError:
+                            raise
+                        except Exception:
+                            pass  # can't read dimensions; let it through
+                    return data, content_type, None
         except (asyncio.TimeoutError, FetchError, Exception) as exc:
+            last_error = str(exc)
             if attempt == max_retries - 1:
                 logger.debug("download failed url=%s error=%s", url, exc)
-                return None, None
+                return None, None, last_error
             delay = (2 ** attempt) + random.random()
             await asyncio.sleep(delay)
-    return None, None
+    return None, None, "download_failed"

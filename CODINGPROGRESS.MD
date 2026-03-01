@@ -159,3 +159,30 @@ Update: Quality audit output now includes laplacian variance, edge density, and
 entropy per sample to align with the runtime gate.
 Update: Refreshed README CLI usage examples to include run/stats/audit,
 manifest toggles, and top-level --config usage.
+
+## 2026-02-24
+Update: Added an adaptive source intelligence loop in
+`tifa_archivist/source_intelligence.py` and integrated it in
+`tifa_archivist/orchestrator.py`.
+
+Update: The run now persists per-query, per-host, and query+host outcomes in
+`source_intelligence.json` and uses that state to:
+- re-rank queries with an exploration/exploitation score
+- generate adaptive query variants (including `site:` variants from winning hosts)
+- down-rank historically poor hosts before enqueueing URLs
+
+Update: Added adaptive config knobs in `tifa_archivist/config.py` and README
+notes so behavior can be tuned from `config.yaml` without code changes.
+
+Update: Added focused tests in `tests/test_source_intelligence.py` for state
+roundtrip, bad-host rejection behavior, and adaptive query planning with site
+variants.
+
+Update: Fixed Python 3.13 compatibility in `tifa_archivist/classify.py` by
+replacing removed `imghdr` usage with direct byte-signature MIME sniffing.
+
+Update: Refreshed stale tests:
+- `tests/test_orchestrator_smoke.py` now monkeypatches `search_ddg_images` and
+  uses current `AppConfig` fields.
+- `tests/test_dedupe.py` now uses a checker-pattern image for a stable
+  non-zero phash-distance assertion.
