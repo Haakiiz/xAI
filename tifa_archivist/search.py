@@ -81,6 +81,7 @@ def search_ddg_images(
                     for result in ddgs.images(
                         query,
                         safesearch="off",
+                        size="Large",
                         max_results=max_results,
                     ):
                         if stop_flag.is_set():

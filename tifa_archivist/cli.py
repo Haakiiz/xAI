@@ -9,6 +9,7 @@ from .config import DEFAULT_CONFIG_PATH, load_config
 from .db import ImageDB
 from .logging_config import setup_logging
 from .orchestrator import run_pipeline
+from .quality_audit import run_quality_audit
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -44,6 +45,41 @@ def build_parser() -> argparse.ArgumentParser:
     stats_parser = subparsers.add_parser("stats", help="Show dataset counts")
     stats_parser.add_argument("--out", type=Path, default=None, help="Output directory")
 
+    audit_parser = subparsers.add_parser(
+        "audit",
+        help="Audit kept images for visual quality (gray/flat/blurry detection).",
+    )
+    audit_parser.add_argument("--out", type=Path, default=None, help="Output directory")
+    audit_parser.add_argument(
+        "--limit",
+        type=int,
+        default=200,
+        help="Max images to audit (most recent first)",
+    )
+    audit_parser.add_argument(
+        "--report",
+        type=Path,
+        default=Path("QUALITYREPORT.MD"),
+        help="Markdown report path",
+    )
+    audit_parser.add_argument(
+        "--json",
+        type=Path,
+        default=Path("quality_report.json"),
+        help="JSON report path (full per-image metrics)",
+    )
+    audit_parser.add_argument(
+        "--llm",
+        action="store_true",
+        help="Additionally call Gemini on flagged/top-N images (needs GEMINI_API_KEY)",
+    )
+    audit_parser.add_argument(
+        "--llm-limit",
+        type=int,
+        default=30,
+        help="Max images to send to Gemini when --llm is set",
+    )
+
     return parser
 
 
@@ -77,3 +113,16 @@ def main() -> None:
         print(f"Total records: {total}")
         for category, count in sorted(counts.items()):
             print(f"{category}: {count}")
+    elif args.command == "audit":
+        out_dir = args.out or config.out_dir
+        setup_logging(config.log_dir)
+        run_quality_audit(
+            config,
+            out_dir,
+            args.limit,
+            args.report,
+            args.json,
+            args.llm,
+            args.llm_limit,
+        )
+        print(f"Wrote {args.report} and {args.json}")

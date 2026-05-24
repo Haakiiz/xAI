@@ -14,6 +14,8 @@ ALLOWED_CONTENT_TYPES = {
     "image/jpg",
     "image/pjpeg",
     "image/png",
+    "image/webp",
+    "image/avif",
     "application/octet-stream",
 }
 
@@ -38,23 +40,23 @@ async def fetch_image(
                     content_type = (
                         resp.headers.get("Content-Type", "").split(";")[0].strip().lower()
                     )
+                    # Content-Length early-out: only reject if the declared size is
+                    # clearly over the max.  Do NOT reject on declared-too-small here —
+                    # many CDNs (tensorart, wixmp, wallpaperaccess) declare the
+                    # *compressed* size and aiohttp transparently decompresses, making
+                    # the actual body larger.  Let the post-download size check decide.
                     content_length = resp.headers.get("Content-Length")
-                    expected = None
                     if content_length and content_length.isdigit():
-                        expected = int(content_length)
-                        if expected > max_bytes:
+                        if int(content_length) > max_bytes:
                             raise FetchError("image too large")
-                        if expected < min_bytes:
-                            raise FetchError("image too small")
                     if content_type:
                         if content_type not in ALLOWED_CONTENT_TYPES:
-                            raise FetchError("unsupported content-type")
+                            raise FetchError(f"unsupported content-type: {content_type}")
                     else:
                         # If the server does not send a content-type, rely on URL filtering.
                         pass
                     data = await resp.content.read(max_bytes + 1)
-                    if expected is not None and len(data) != expected:
-                        raise FetchError("truncated download")
+                    # Authoritative size checks on the actual bytes received.
                     if len(data) > max_bytes:
                         raise FetchError("image too large")
                     if len(data) < min_bytes:
@@ -64,8 +66,9 @@ async def fetch_image(
                     return data, content_type
         except (asyncio.TimeoutError, FetchError, Exception) as exc:
             if attempt == max_retries - 1:
-                logger.debug("download failed url=%s error=%s", url, exc)
+                logger.warning("download failed url=%s error=%s", url, exc)
                 return None, None
             delay = (2 ** attempt) + random.random()
+            logger.debug("download retry %s/%s url=%s error=%s", attempt + 1, max_retries, url, exc)
             await asyncio.sleep(delay)
     return None, None

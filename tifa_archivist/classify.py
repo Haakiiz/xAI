@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import base64
-import imghdr
 import json
 import logging
 import random
@@ -13,9 +12,12 @@ import aiohttp
 from .models import ClassificationResult
 
 
+# 32×32 solid-gray PNG (1024 pixels).  xAI requires ≥ 512 total pixels.
 TEST_IMAGE_B64 = (
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAANElEQVR4nO3NMQEAMAyEwG+0vn8NlUCWbJwAeG1zaU7rcbDgADlADpAD5AA5QA6QA+Qg5APEKQFsjCbQkgAAAABJRU5ErkJggg=="
 )
+
+# imghdr was removed in Python 3.13; use magic-byte detection instead.
 
 SYSTEM_PROMPT = (
     "You are a strict image classifier. Return ONLY JSON matching the schema. "
@@ -39,14 +41,13 @@ class ImageDecodeError(RuntimeError):
 
 
 def _guess_mime(data: bytes) -> str:
-    kind = imghdr.what(None, data)
-    if kind == "jpeg":
+    if data[:3] == b"\xff\xd8\xff":
         return "image/jpeg"
-    if kind == "png":
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
         return "image/png"
-    if kind == "gif":
+    if data[:6] in (b"GIF87a", b"GIF89a"):
         return "image/gif"
-    if kind == "webp":
+    if len(data) >= 12 and data[:4] == b"RIFF" and data[8:12] == b"WEBP":
         return "image/webp"
     return "image/jpeg"
 

@@ -4,6 +4,7 @@ import asyncio
 import json
 import logging
 import mimetypes
+import re
 import threading
 from pathlib import Path
 from urllib.parse import urlparse
@@ -14,10 +15,10 @@ from tqdm import tqdm
 from .classify import XAIClassifier
 from .config import AppConfig
 from .db import ImageDB
-from .dedupe import compute_sha256
+from .dedupe import PhashIndex, compute_phash, compute_sha256
 from .download import fetch_image
 from .search import generate_queries, search_ddg_images
-from .utils import slugify, utc_now_iso
+from .utils import image_quality_metrics, slugify, utc_now_iso
 
 
 CATEGORIES = [
@@ -30,7 +31,151 @@ CATEGORIES = [
     "nsfw",
     "other",
 ]
-ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+
+
+# Hosts that consistently serve garbage (403, thumbnails, or near-duplicate floods).
+# Extend via CODINGPROGRESS.MD when new offenders emerge.
+BLOCKED_HOSTS = {
+    # Requires login to serve full-size images; DDG returns auth-gated thumbnails.
+    "zerochan.net",
+    # Product-mockup storefronts — images are merchandise renders, not fan art.
+    "redbubble.com",
+    "merch.amazon.com",
+    # DeviantArt CDN: JWTs expire within hours; DDG caches stale URLs.
+    "wixmp.com",
+    # Old DeviantArt image CDN — stale direct links.
+    "deviantart.net",
+    # Old NewGrounds CDN — frequent 404s on cached links.
+    "ngfiles.com",
+    # Rule-34 / eroge-scraper sites.
+    "rule34.xxx",
+    "rule34.paheal.net",
+    "paheal.net",
+    # Preview/promo sites with paywall full-res.
+    "previewsworld.com",
+    "cdn.donmai.us",
+    # Poster / canvas print storefronts — serve product mockup JPEGs.
+    "kaiteez.com",
+    "byztee.com",
+    "wallpaperaccess.com",
+    # Reactor image CDN — low-res reposts.
+    "reactor.cc",
+}
+
+# URL-path substrings that almost always indicate a thumbnail/preview/avatar.
+_THUMB_PATH_MARKERS = (
+    "/thumb",
+    "/thumbs/",
+    "/preview",
+    "preview_",
+    "_small",
+    "_thumb",
+    "/avatar",
+    "/icon",
+    "/sq/",
+)
+# Query-string size hints (e.g. "?w=150&h=150").  Values < 400 are treated as thumbnails.
+_THUMB_SIZE_QUERY = re.compile(r"(?:w|h|size|sz)=(\d{1,4})", re.IGNORECASE)
+
+
+def _normalize_host(netloc: str) -> str:
+    host = netloc.lower().strip()
+    if host.startswith("www."):
+        host = host[4:]
+    return host
+
+
+def _looks_like_thumbnail(url: str) -> bool:
+    parsed = urlparse(url)
+    path = parsed.path.lower()
+    for marker in _THUMB_PATH_MARKERS:
+        if marker in path:
+            return True
+    if parsed.query:
+        for match in _THUMB_SIZE_QUERY.finditer(parsed.query):
+            try:
+                if int(match.group(1)) < 400:
+                    return True
+            except ValueError:
+                continue
+    return False
+
+
+def _is_blocked_host(netloc: str) -> bool:
+    """Return True if netloc matches any entry in BLOCKED_HOSTS (exact or subdomain)."""
+    host = _normalize_host(netloc)
+    return host in BLOCKED_HOSTS or any(
+        host.endswith("." + blocked) for blocked in BLOCKED_HOSTS
+    )
+
+
+def is_good_url(url: str) -> bool:
+    """Cheap URL-level filter: extension, host blocklist, thumbnail patterns."""
+    parsed = urlparse(url)
+    ext = Path(parsed.path).suffix.lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        return False
+    if _is_blocked_host(parsed.netloc):
+        return False
+    if _looks_like_thumbnail(url):
+        return False
+    return True
+
+
+def _is_low_quality(
+    config: AppConfig,
+    metrics: tuple[
+        float | None, float | None, float | None, float | None,
+        float | None, float | None, float | None, float | None,
+    ],
+) -> tuple[bool, list[str]]:
+    """Mirror of quality_audit._flag_metrics, used as runtime gate.
+
+    Returns (is_low_quality, flags).  Flag combinations intentionally match
+    the thresholds tuned in CODINGPROGRESS.MD (Feb 2026).
+    """
+    (
+        luma_stddev,
+        sat_stddev,
+        sat_mean,
+        colorfulness,
+        flat_ratio,
+        laplacian_var,
+        edge_density,
+        entropy,
+    ) = metrics
+
+    if luma_stddev is None or sat_stddev is None or sat_mean is None:
+        return True, ["metrics_missing"]
+
+    flags: list[str] = []
+    low_luma = luma_stddev < config.min_luma_stddev
+    low_sat_std = sat_stddev < config.min_sat_stddev
+    low_sat_mean = sat_mean < config.min_sat_mean
+    low_color = colorfulness is not None and colorfulness < config.min_colorfulness
+    high_flat_ratio = flat_ratio is not None and flat_ratio >= config.flat_tile_ratio
+    low_lap = laplacian_var is not None and laplacian_var < config.min_laplacian_var
+    low_edge = edge_density is not None and edge_density < config.min_edge_density
+    low_entropy = entropy is not None and entropy < config.min_entropy
+
+    if low_luma and low_sat_std:
+        flags.append("low_luma+low_sat_std")
+    if low_sat_mean and low_sat_std:
+        flags.append("low_sat_mean+low_sat_std")
+    if low_color and low_sat_std:
+        flags.append("low_color+low_sat_std")
+    # flat_ratio and low_entropy alone are too noisy — official art commonly has
+    # solid backgrounds.  Only reject when they fire together, or alongside a
+    # sharpness failure.
+    if high_flat_ratio and low_entropy:
+        flags.append("flat_ratio+low_entropy")
+    if high_flat_ratio and low_lap and low_edge:
+        flags.append("flat_ratio+blurry")
+    if low_lap and low_edge:
+        flags.append("low_lap+low_edge")
+
+    return len(flags) > 0, flags
 
 
 class Counters:
@@ -191,10 +336,8 @@ async def run_pipeline(config: AppConfig) -> None:
             seen_urls.add(url)
             return True
 
-    def is_supported_url(url: str) -> bool:
-        parsed = urlparse(url)
-        ext = Path(parsed.path).suffix.lower()
-        return ext in ALLOWED_EXTENSIONS
+    phash_index = PhashIndex(db.get_all_phashes(), threshold=config.phash_distance)
+    phash_lock = asyncio.Lock()
 
     timeout = aiohttp.ClientTimeout(total=config.request_timeout)
     download_sema = asyncio.Semaphore(config.download_concurrency)
@@ -214,8 +357,15 @@ async def run_pipeline(config: AppConfig) -> None:
 
     async with aiohttp.ClientSession(
         headers={
-            "User-Agent": config.user_agent,
-            "Accept": "image/jpeg,image/png,image/*;q=0.8,*/*;q=0.5",
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/124.0.0.0 Safari/537.36"
+            ),
+            "Accept": "image/avif,image/webp,image/apng,image/jpeg,image/png,image/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Referer": "https://duckduckgo.com/",
         }
     ) as session:
         classifier: XAIClassifier | None = None
@@ -248,7 +398,7 @@ async def run_pipeline(config: AppConfig) -> None:
             for url in urls:
                 if stop_event.is_set() or search_stop_event.is_set():
                     break
-                if not is_supported_url(url):
+                if not is_good_url(url):
                     continue
                 if not await is_new_url(url):
                     continue
@@ -297,7 +447,46 @@ async def run_pipeline(config: AppConfig) -> None:
                         await counters.inc("discarded")
                         continue
 
-                    phash = None
+                    # --- Quality gate ---------------------------------------
+                    # Step 1: decode-success + CV metrics.  A None luma_stddev
+                    # means PIL couldn't parse the bytes at all.
+                    metrics = await asyncio.to_thread(
+                        image_quality_metrics,
+                        data,
+                        config.variance_max_side,
+                        config.flat_grid_size,
+                        config.flat_tile_stddev_max,
+                        config.edge_threshold,
+                    )
+                    if metrics[0] is None:
+                        db.insert_record(
+                            url, sha256, None, None, "discard", "decode_failed", 0.0
+                        )
+                        await counters.inc("discarded")
+                        continue
+
+                    is_low, low_flags = _is_low_quality(config, metrics)
+                    if is_low:
+                        reason = "low_quality:" + "|".join(low_flags)
+                        db.insert_record(url, sha256, None, None, "discard", reason, 0.0)
+                        await counters.inc("discarded")
+                        continue
+
+                    # Step 2: perceptual-hash near-duplicate check.  Lock is
+                    # held across check+add so two workers can't both admit
+                    # the same near-dup image racing each other.
+                    phash = await asyncio.to_thread(compute_phash, data)
+                    if phash is not None:
+                        async with phash_lock:
+                            if phash_index.is_similar(phash):
+                                db.insert_record(
+                                    url, sha256, phash, None, "discard",
+                                    "near_duplicate", 1.0,
+                                )
+                                await counters.inc("discarded")
+                                continue
+                            phash_index.add(phash)
+                    # --------------------------------------------------------
 
                     if await counters.get("kept") >= config.limit:
                         db.insert_record(

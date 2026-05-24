@@ -1,0 +1,47 @@
+# ============================================================
+#  tifa.yaml — konfigurasjon for tifa.py bildegenerering
+#  Endre verdiene her, kjør så:  python tifa.py
+# ============================================================
+
+# ----- PROMPT -----------------------------------------------
+# Beskriv bildet du vil ha. Vær spesifikk for best resultat.
+prompt: "Tifa Lockhart from Final Fantasy VII remake / rebirth as a busty milf. Cloud and the kids playing in the background. They live on a farm"
+
+# ----- MODELL -----------------------------------------------
+# Tilgjengelige modeller:
+#   grok-imagine-image-quality   → beste kvalitet, $0.05/bilde
+#   grok-imagine                 → raskere/billigere,  $0.02/bilde
+model: "grok-imagine-image-quality"
+
+# ----- ANTALL BILDER ----------------------------------------
+# Antall bilder å generere per kjøring. Maks 10.
+n: 3
+
+# ----- ASPECT RATIO -----------------------------------------
+# Støttede verdier:
+#   "1:1"    → kvadrat (standard)
+#   "16:9"   → widescreen / liggende
+#   "9:16"   → portrett / stående (mobil)
+#   "4:3"    → klassisk TV-format
+#   "3:4"    → portrett, litt bredere enn 9:16
+aspect_ratio: "1:1"
+
+# ----- OPPLØSNING -------------------------------------------
+# Støttede verdier:
+#   "1k"   → ca. 1024px på lengste kant  (raskere, billigere)
+#   "2k"   → ca. 2048px på lengste kant  (skarpere detaljer)
+resolution: "1k"
+
+# ----- BILDFORMAT (svar fra API) ----------------------------
+# Hvordan API-et returnerer bildet:
+#   "url"       → returnerer en midlertidig nedlastings-URL
+#   "b64_json"  → returnerer bildet som base64-streng (lagres direkte)
+# Merk: "url"-lenker utløper etter en stund.
+response_format: "b64_json"
+
+# ----- LAGRING ----------------------------------------------
+# Mappe der bilder lagres. Opprettes automatisk om den ikke finnes.
+output_dir: "./generated"
+
+# Filnavn-prefiks. Endelig navn blir f.eks. "tifa_001.png"
+filename_prefix: "tifa"

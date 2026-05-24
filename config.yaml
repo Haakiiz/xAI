@@ -4,37 +4,77 @@ xai:
   model_primary: "grok-4-1-fast-non-reasoning"
   model_fallback: "grok-2-vision-latest"
 
+# Set GEMINI_API_KEY env var, or uncomment below, to enable `audit --llm`.
+# gemini:
+#   api_key: "..."
+#   base_url: "https://generativelanguage.googleapis.com/v1beta"
+#   model: "gemini-2.0-flash"
+
 out_dir: "tifa_dataset"
 log_dir: "logs"
 limit: 20
 manifest: true
+
+# --- Concurrency -------------------------------------------------------------
 download_concurrency: 8
 classify_concurrency: 3
-max_results_per_query: 80
-max_urls_multiplier: 2
 search_concurrency: 2
-phash_distance: 6
-request_timeout: 20
+
+# --- Search ------------------------------------------------------------------
+max_results_per_query: 50
+# How many URL candidates to gather per kept-image slot.
+# ~40% of URLs now pass download + quality gate, so multiplier 4 gives a
+# comfortable headroom (200 limit → 800 candidate URLs → ~10-15 search calls).
+# Raise to 8+ if you're seeing the run stall before hitting the limit.
+max_urls_multiplier: 4
+
+# --- Download ----------------------------------------------------------------
+min_bytes: 10000          # reject obvious thumbnails; raise to 50000 to be stricter
 max_bytes: 15000000
+request_timeout: 20
 queue_size: 200
 max_download_retries: 3
 max_classify_retries: 2
 max_search_retries: 3
 user_agent: "tifa-archivist/0.1"
 
-search_queries:
-  - "Tifa Lockhart FF7"
-  - "Tifa Lockhart wallpaper 4k"
-  - "Tifa Lockhart cosplay"
-  - "Tifa Lockhart fanart"
-  - "Tifa Lockhart 2d art"
-  - "Tifa Lockhart 3d render"
-  - "Tifa Lockhart key art"
-  - "Tifa Lockhart screenshot"
-  - "Tifa Lockhart official art"
-  - "Tifa Lockhart wallpaper"
-  - "Tifa Lockhart nsfw"
-  - "Tifa Lockhart sfw"
-  - "Tifa Lockhart remake"
-  - "\u30c6\u30a3\u30d5\u30a1 \u30ed\u30c3\u30af\u30cf\u30fc\u30c8"
+# --- Dedup -------------------------------------------------------------------
+phash_distance: 6         # larger = more aggressive near-duplicate merging
 
+# --- Quality gate (runtime) --------------------------------------------------
+# Images that fail these thresholds are discarded before classification.
+# Raise thresholds to be stricter (more rejections, higher quality).
+# Lower them to keep more images (more slop).
+#
+# Current mode: PERMISSIVE — flat_ratio and low_entropy no longer fire alone;
+# they must combine with a second failure.  Raise flat_tile_ratio toward 0.7
+# and min_entropy toward 3.0 to tighten again.
+min_luma_stddev: 5.0        # was 10.0
+min_sat_stddev: 2.0         # was 5.0
+min_sat_mean: 5.0           # was 10.0
+min_colorfulness: 2.0       # was 5.0
+flat_tile_ratio: 0.92       # was 0.7  — only reject near-entirely-solid images
+min_laplacian_var: 3.0      # was 10.0
+min_edge_density: 0.003     # was 0.01
+min_entropy: 1.5            # was 3.0
+variance_max_side: 512
+flat_grid_size: 16
+flat_tile_stddev_max: 8.0
+edge_threshold: 10.0
+
+# --- Adaptive search (disabled for now; infra exists, not wired) -------------
+adaptive_search_enabled: false
+# source_intelligence_path: "tifa_dataset/source_intelligence.json"
+
+# --- Queries -----------------------------------------------------------------
+# Biased toward high-quality sources (official art, renders, wallpapers).
+# Add cosplay/fanart/nsfw back if you want those categories.
+search_queries:
+  - "Tifa Lockhart FF7 official art"
+  - "Tifa Lockhart FFVII Remake key art"
+  - "Tifa Lockhart 4k wallpaper"
+  - "Tifa Lockhart 3d render"
+  - "Tifa Lockhart promotional art"
+  - "Tifa Lockhart portrait"
+  - "Tifa Lockhart NSFW"
+  - "\u30c6\u30a3\u30d5\u30a1 \u30ed\u30c3\u30af\u30cf\u30fc\u30c8"

@@ -2,8 +2,10 @@ aiohttp
 ddgs
 imagehash
 numpy
+openai
 pillow
 pydantic
+python-dotenv
 PyYAML
 pytest
 tqdm
