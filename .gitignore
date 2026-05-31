@@ -3,6 +3,14 @@
 venv/
 __pycache__/
 *.pyc
-logs/*.log
+
+# Runtime output / logs (contain search queries + image URLs)
+logs/
 tifa_dataset/
 quality_report.json
+images.db
+
+# IDE / tooling
+.idea/
+.claude/
+.vscode/
